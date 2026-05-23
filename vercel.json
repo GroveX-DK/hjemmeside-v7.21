@@ -1,9 +1,2 @@
 {
-    "redirects": [
-      {
-        "source": "https://www.grovex.dk/(.*)",
-        "destination": "https://grovex.dk/$1",
-        "permanent": true
-      }
-    ]
-  }
+}
