@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Om GroveX – IT-løsninger og automatisering til restauranter</title>
+  <meta name="description" content="Lær GroveX at kende – vi specialiserer os i digitale systemer, automatisering og IT-løsninger til restauranter i Danmark.">
+  <link rel="canonical" href="https://grovex.dk/om-os.html">
+  <link rel="icon" type="image/png" href="assets/grovex-logo-firkant.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── PAGE-SPECIFIC ── */
+    .motivation-split {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      align-items: start;
+      margin-top: 64px;
+    }
+    .motivation-intro {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      color: var(--black);
+      line-height: 1.1;
+      margin: 0;
+    }
+    .motivation-words {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.85rem, 3.8vw, 3rem);
+      letter-spacing: -0.05em;
+      color: var(--blue);
+      line-height: 1.05;
+    }
+    .motivation-words li { margin: 0; }
+
+    .process-list { display: flex; flex-direction: column; gap: 0; margin-top: 64px; }
+    .process-step {
+      display: grid; grid-template-columns: 80px 1fr;
+      gap: 24px; padding: 32px 0;
+      border-bottom: 1px solid rgba(0,0,0,.07);
+      transition: background .2s;
+    }
+    .process-step:first-child { border-top: 1px solid rgba(0,0,0,.07); }
+    .process-step-num {
+      font-family: var(--font-display); font-size: 3rem;
+      font-weight: 800; color: rgba(0,0,0,.07); line-height: 1;
+      letter-spacing: -0.06em; padding-top: 4px;
+      transition: color .25s;
+    }
+    .process-step:hover .process-step-num { color: var(--blue); }
+    .process-step-body h4 {
+      font-family: var(--font-display); font-size: 1.1rem;
+      font-weight: 700; margin-bottom: 8px;
+    }
+    .process-step-body p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; max-width: 540px; }
+
+    @media (max-width: 600px) {
+      .motivation-split { grid-template-columns: 1fr; gap: 1.25rem; }
+      .process-step { grid-template-columns: 50px 1fr; gap: 16px; }
+      .process-step-num { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor"></div><div id="cursor-ring"></div>
+
+  <header id="header">
+    <a href="index.html" class="logo-mark">GroveX</a>
+    <nav>
+      <a href="index.html">Forside</a>
+      <a href="om-os.html" style="color:var(--black);font-weight:600">Om os</a>
+      <a href="portfolio.html">Portefølje</a>
+      <a href="kontakt.html" class="nav-cta">Kontakt</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </header>
+  <div class="mob-overlay" id="mobOverlay"></div>
+  <div class="mob-drawer" id="mobDrawer">
+    <a href="index.html">Forside</a><a href="om-os.html">Om os</a>
+    <a href="portfolio.html">Portefølje</a><a href="kontakt.html">Kontakt</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <span class="page-hero-eyebrow">Om GroveX</span>
+    <h1 class="page-hero-title">Specialister i restaurant<br>IT-løsninger</h1>
+    <p class="page-hero-sub">Vi fokuserer udelukkende på restaurationsbranchen – fordi vi kender dine udfordringer og de bedste løsninger.</p>
+    <div class="page-img-wrap">
+      <img src="assets/Hero image om os - Mand der sidder ved computer.png" alt="GroveX teamet arbejder med digitale restaurant systemer">
+    </div>
+  </div>
+
+  
+
+  <!-- VALUES -->
+  <section style="background:var(--off)"><div class="section-inner">
+    <div class="reveal">
+      <span class="label">Vores Motivation</span>
+    </div>
+    <div class="motivation-split">
+      <p class="motivation-intro reveal">Vi er motiveret af</p>
+      <ul class="motivation-words">
+        <li class="reveal" style="transition-delay:.06s">Kodning</li>
+        <li class="reveal" style="transition-delay:.11s">Design</li>
+        <li class="reveal" style="transition-delay:.16s">Automation</li>
+        <li class="reveal" style="transition-delay:.21s">Hjemmesider</li>
+        <li class="reveal" style="transition-delay:.26s">Topkvalitet</li>
+      </ul>
+    </div>
+  </div></section>
+
+  <!-- TECH FEATURE -->
+  <section><div class="section-inner"><div class="tech-split">
+    <div class="reveal">
+      <span class="label">Teknologi</span>
+      <h2 class="section-title">Bygget med den nyeste teknologi</h2>
+      <p class="section-sub">Vi bruger hardware og software i verdensklasse – designet til at holde i restaurationsmiljøets daglige pres.</p>
+      <div class="feat-list">
+        <div class="feat-item">
+          <span class="feat-num">01</span>
+          <div class="feat-text"><h4>Bedste hardware på markedet</h4><p>Kompakt, kraftfuldt og pålideligt – designet til 24/7 drift i restaurantmiljøer.</p></div>
+        </div>
+        <div class="feat-item">
+          <span class="feat-num">02</span>
+          <div class="feat-text"><h4>Cloud-baseret infrastruktur</h4><p>Dine data er sikre, tilgængelige og krypterede – uanset hvor du befinder dig.</p></div>
+        </div>
+        <div class="feat-item">
+          <span class="feat-num">03</span>
+          <div class="feat-text"><h4>GDPR-kompatibelt fra dag ét</h4><p>Privatlivsbeskyttelse er bygget ind i arkitekturen – ikke et tilbehør.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="tech-visual reveal" style="transition-delay:.15s">
+      <div class="tech-box">
+        <div class="tech-glow"></div>
+        <span class="tech-label">Vores Stack</span>
+        <p class="tech-big">Moderne.<br>Pålidelig.<br>Skalerbar.</p>
+        <ul class="tech-list">
+          <li>Bedste hardware på markedet</li>
+          <li>99.9% oppetid garanteret</li>
+          <li>Krypteret dataoverførsel</li>
+          <li>Automatisk backup</li>
+          <li>Fjernmonitorering 24/7</li>
+          <li>GDPR-kompatibelt</li>
+        </ul>
+      </div>
+    </div>
+  </div></div></section>
+
+  <!-- PROCESS -->
+  <section style="background:var(--off)"><div class="section-inner">
+    <div class="reveal">
+      <span class="label">Sådan arbejder vi</span>
+      <h2 class="section-title">Fra idé til implementering</h2>
+      <p class="section-sub">En enkel og gennemsigtig proces – så du altid ved, hvad der sker.</p>
+    </div>
+    <div class="process-list reveal">
+      <div class="process-step">
+        <div class="process-step-num">01</div>
+        <div class="process-step-body">
+          <h4>Indledende møde</h4>
+          <p>Vi lytter til dine udfordringer, kortlægger dine behov og skitserer de muligheder, der giver mest værdi for netop din restaurant.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">02</div>
+        <div class="process-step-body">
+          <h4>Løsningsdesign</h4>
+          <p>Vi tegner arkitekturen for dit nye system og præsenterer et konkret forslag med tidsplan og pris – ingen overraskelser.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">03</div>
+        <div class="process-step-body">
+          <h4>Udvikling & test</h4>
+          <p>Vi bygger og afprøver løsningen grundigt, så du kan stole på, at alt virker perfekt fra første dag.</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">04</div>
+        <div class="process-step-body">
+          <h4>Implementering & support</h4>
+          <p>Vi installerer systemet, træner dit personale og er altid klar til at hjælpe – også efter go-live.</p>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- CONTACT -->
+  <section class="contact-bg"><div class="section-inner"><div class="contact-layout">
+    <div class="contact-info-side reveal">
+      <span class="label">Kom i gang</span>
+      <h2 class="section-title">Lad os tale om din restaurant</h2>
+      <p>Book et uforpligtende møde og lad os vise, hvad vi kan gøre for din drift.</p>
+        <div class="contact-links">
+          <a href="tel:+4560571908" class="contact-link"><div class="contact-link-icon"><img src="assets\phone-call-white-icon.svg" alt="" width="20" height="20" class="icon-svg" aria-hidden="true"></div><div><div class="contact-link-sublabel">Telefon</div>+45 60 57 19 08</div></a>
+          <a href="mailto:grovex.dk@gmail.com" class="contact-link"><div class="contact-link-icon"><img src="assets\email-envelope-white-icon.svg" alt="" width="20" height="20" class="icon-svg" aria-hidden="true"></div><div><div class="contact-link-sublabel">Email</div>grovex.dk@gmail.com</div></a>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay:.15s">
+      <form class="cform" id="contactForm">
+        <div class="cform-grid">
+          <input type="text" name="name" placeholder="Navn" required>
+          <input type="text" name="company" placeholder="Virksomhed" required>
+          <input type="tel" name="phone" placeholder="Telefonnummer" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="date" name="date" required class="cform-full">
+          <input type="time" name="time" placeholder="Tidspunkt" required class="cform-full">
+        </div>
+        <button type="submit" class="cform-btn">Send besked →</button>
+        <div id="formStatus" class="form-status-msg"></div>
+      </form>
+    </div>
+  </div></div></section>
+
+  <!-- FOOTER -->
+  <footer><div class="footer-top">
+    <div><div class="footer-brand-name">GroveX</div><p class="footer-desc">Digitale systemer og automatisering specialiseret til restaurationsbranchen i Danmark.</p></div>
+    <div class="footer-col"><h5>Navigation</h5><a href="index.html">Forside</a><a href="om-os.html">Om os</a><a href="portfolio.html">Portefølje</a><a href="kontakt.html">Kontakt</a></div>
+    <div class="footer-col"><h5>Ydelser</h5><a href="#">Kassesystemer</a><a href="#">Hjemmesider</a><a href="#">Automatisering</a><a href="#">Integrationer</a></div>
+    <div class="footer-col"><h5>Kontakt</h5><a href="tel:+4560571908">+45 60 57 19 08</a><a href="mailto:grovex.dk@gmail.com">grovex.dk@gmail.com</a></div>
+  </div>
+  <div class="footer-bottom"><span class="footer-copy">© 2026 GroveX. Alle rettigheder forbeholdes.</span><span class="footer-copy">Danmark</span></div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

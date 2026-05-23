@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Botanica — Plantebaseret Køkken</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --sage:#8fad88;
+  --sage-dark:#6a8f62;
+  --sage-pale:#b8ccb3;
+  --forest:#2d5a27;
+  --forest-mid:#3d7035;
+  --moss:#4e7c45;
+  --cream:#f7f3ed;
+  --cream-dark:#ede6d9;
+  --cream-mid:#f0ebe2;
+  --parchment:#e8dece;
+  --soil:#2c2416;
+  --earth:#5c4a2a;
+  --muted:#7a7060;
+  --white:#fff;
+  --border:rgba(44,36,22,0.1);
+}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--cream);
+  color:var(--soil);
+  font-family:'Outfit',sans-serif;
+  font-weight:300;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* GRAIN */
+body::after{
+  content:'';
+  position:fixed;inset:0;z-index:1000;
+  pointer-events:none;
+  opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size:300px;
+}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--cream);}
+::-webkit-scrollbar-thumb{background:var(--sage-dark);border-radius:99px;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:26px 0;transition:all 0.45s ease;
+}
+nav.scrolled{
+  background:rgba(247,243,237,0.93);
+  backdrop-filter:blur(16px);
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+.nav-c{max-width:1280px;margin:0 auto;padding:0 52px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{
+  font-family:'Cormorant',serif;
+  font-size:1.6rem;font-weight:500;
+  color:var(--forest);
+  text-decoration:none;
+  letter-spacing:0.1em;
+  display:flex;align-items:center;gap:10px;
+}
+.nav-logo-leaf{width:22px;height:22px;flex-shrink:0;}
+.nav-links{display:flex;align-items:center;gap:38px;list-style:none;}
+.nav-links a{
+  text-decoration:none;color:var(--muted);
+  font-size:0.8rem;font-weight:400;
+  letter-spacing:0.13em;text-transform:uppercase;
+  transition:color 0.22s;
+}
+.nav-links a:hover{color:var(--forest);}
+.nav-book{
+  background:var(--forest)!important;
+  color:var(--cream)!important;
+  padding:10px 28px;
+  border-radius:40px;
+  letter-spacing:0.1em!important;
+  transition:background 0.25s!important;
+}
+.nav-book:hover{background:var(--forest-mid)!important;}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
+.ham span{display:block;width:22px;height:1px;background:var(--soil);}
+.mob-nav{display:none;}
+@media(max-width:820px){
+  .nav-links{display:none;}
+  .ham{display:flex;}
+  .mob-nav.open{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    position:fixed;inset:0;background:var(--cream);z-index:300;
+  }
+  .mob-nav a{font-family:'Cormorant',serif;font-size:2.4rem;color:var(--soil);text-decoration:none;padding:12px;font-weight:400;}
+  .mob-close{position:absolute;top:26px;right:26px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);}
+}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  position:relative;overflow:hidden;
+  background:var(--cream);
+}
+/* Botanical background illustration */
+.hero-botanicals{
+  position:absolute;inset:0;
+  pointer-events:none;
+}
+.hero-botanicals svg{
+  position:absolute;
+  opacity:0.13;
+}
+.hero-botanicals .bot-tl{top:-40px;left:-40px;width:420px;height:420px;}
+.hero-botanicals .bot-br{bottom:-60px;right:-40px;width:500px;height:500px;transform:rotate(180deg);}
+.hero-botanicals .bot-tr{top:20px;right:160px;width:200px;height:200px;opacity:0.08;}
+
+.hero-inner{
+  max-width:1280px;margin:0 auto;
+  padding:0 52px;padding-top:120px;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:60px;align-items:center;
+  position:relative;z-index:2;
+  width:100%;
+}
+.hero-text{
+  max-width: 500px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(143,173,136,0.18);
+  color:var(--forest);
+  padding:7px 18px;
+  border-radius:40px;
+  font-size:0.72rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  margin-bottom:32px;
+  opacity:0;animation:fu 0.7s ease 0.2s forwards;
+}
+.hero-badge::before{content:'✦';font-size:0.65rem;}
+.hero-h1{
+  font-family:'Cormorant',serif;
+  font-size:clamp(4.5rem,9vw,8.5rem);
+  font-weight:300;
+  line-height:0.88;
+  letter-spacing:-0.01em;
+  color:var(--forest);
+  margin-bottom:32px;
+  opacity:0;animation:fu 0.9s ease 0.4s forwards;
+}
+.hero-h1 em{
+  font-style:italic;
+  color:var(--sage-dark);
+  display:block;
+  padding-left:48px;
+}
+.hero-sub{
+  font-size:1rem;
+  color:var(--muted);
+  max-width:400px;
+  line-height:1.9;
+  margin-bottom:48px;
+  opacity:0;animation:fu 0.9s ease 0.6s forwards;
+}
+.hero-ctas{
+  display:flex;gap:16px;align-items:center;flex-wrap:wrap;
+  opacity:0;animation:fu 0.9s ease 0.8s forwards;
+}
+.btn-filled{
+  display:inline-block;text-decoration:none;
+  background:var(--forest);color:var(--cream);
+  padding:14px 36px;border-radius:40px;
+  font-size:0.82rem;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;
+  transition:all 0.25s;border:none;cursor:pointer;font-family:'Outfit',sans-serif;
+}
+.btn-filled:hover{background:var(--forest-mid);transform:translateY(-2px);}
+.btn-text{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;transition:color 0.22s;
+}
+.btn-text:hover{color:var(--forest);}
+.btn-text::after{content:'→';transition:transform 0.22s;}
+.btn-text:hover::after{transform:translateX(4px);}
+
+.hero-img-side{
+  position:relative;
+  opacity:0;animation:fu 1s ease 0.5s forwards;
+}
+.hero-img-frame{
+  position:relative;
+  height:620px;
+}
+.hero-img-frame img{
+  width:100%;height:100%;
+  object-fit:cover;
+  border-radius:180px 180px 20px 20px;
+  display:block;
+}
+.hero-img-badge{
+  position:absolute;
+  bottom:-20px;left:-24px;
+  background:var(--forest);
+  color:var(--cream);
+  padding:20px 24px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 16px 48px rgba(45,90,39,0.3);
+}
+.hero-img-badge strong{
+  display:block;
+  font-family:'Cormorant',serif;
+  font-size:2.2rem;font-weight:300;
+  line-height:1;margin-bottom:3px;
+}
+.hero-img-badge span{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.65;}
+.hero-img-float{
+  position:absolute;
+  top:40px;right:-30px;
+  background:var(--sage-pale);
+  width:90px;height:90px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0.9;
+}
+.hero-img-float svg{width:44px;height:44px;stroke:var(--forest);fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;}
+
+.hero-scroll-hint{
+  position:absolute;bottom:44px;left:52px;
+  display:flex;align-items:center;gap:14px;
+  opacity:0;animation:fu 1s ease 1.3s forwards;
+}
+.hero-scroll-hint span{font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);}
+.scroll-worm{width:48px;height:1px;background:var(--border);position:relative;overflow:hidden;}
+.scroll-worm::after{
+  content:'';position:absolute;top:0;left:0;
+  width:16px;height:100%;background:var(--sage-dark);
+  animation:worm 1.8s ease-in-out infinite;
+}
+@keyframes worm{0%{left:-16px;}100%{left:100%;}}
+
+@media(max-width:960px){
+  .hero-inner{grid-template-columns:1fr;padding-top:140px;}
+  .hero-img-frame{height:380px;border-radius:120px 120px 20px 20px;}
+  .hero-img-float{right:16px;}
+}
+@media(max-width:600px){.hero-inner{padding:0 24px;padding-top:120px;}}
+
+/* ── PHILOSOPHY BAND ── */
+.philo{
+  background:var(--forest);
+  padding:64px 52px;
+  position:relative;overflow:hidden;
+}
+.philo::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(ellipse at 15% 80%,rgba(143,173,136,0.25) 0%,transparent 50%),
+    radial-gradient(ellipse at 85% 20%,rgba(77,124,69,0.2) 0%,transparent 40%);
+}
+.philo-inner{max-width:1180px;margin:0 auto;position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.08);}
+.philo-item{background:transparent;padding:44px 40px;}
+.philo-icon{width:40px;height:40px;margin-bottom:20px;}
+.philo-icon svg{width:40px;height:40px;stroke:var(--sage-pale);fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;}
+.philo-item h3{
+  font-family:'Cormorant',serif;font-size:1.35rem;font-weight:400;
+  color:rgba(255,255,255,0.92);margin-bottom:10px;
+}
+.philo-item p{font-size:0.86rem;color:rgba(255,255,255,0.45);line-height:1.85;}
+@media(max-width:700px){.philo-inner{grid-template-columns:1fr;}.philo{padding:40px 28px;}}
+
+/* ── ORGANIC WAVE ── */
+.wave{line-height:0;overflow:hidden;}
+.wave svg{display:block;width:100%;}
+
+/* ── ABOUT ── */
+.about{padding:110px 52px;background:var(--cream-mid);}
+.about-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr 1.05fr;gap:90px;align-items:center;}
+.about-imgs{position:relative;flex-shrink:0;}
+.about-img-a{
+  width:100%;height:500px;object-fit:cover;
+  border-radius:20px 120px 20px 20px;
+  display:block;
+}
+.about-img-b{
+  position:absolute;
+  bottom:-36px;right:-36px;
+  width:200px;height:260px;
+  object-fit:cover;
+  border-radius:80px 20px 80px 20px;
+  border:8px solid var(--cream-mid);
+  box-shadow:0 20px 60px rgba(44,36,22,0.18);
+}
+.about-circle{
+  position:absolute;top:-28px;left:-28px;
+  width:76px;height:76px;
+  background:var(--sage-pale);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.about-circle svg{width:34px;height:34px;stroke:var(--forest);fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;}
+.about-copy .ey{
+  font-size:0.72rem;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--sage-dark);
+  display:flex;align-items:center;gap:12px;margin-bottom:22px;
+}
+.about-copy .ey::before{content:'';width:28px;height:1px;background:var(--sage-dark);}
+.about-copy h2{
+  font-family:'Cormorant',serif;
+  font-size:clamp(2.2rem,4vw,3.2rem);font-weight:400;
+  color:var(--soil);line-height:1.1;margin-bottom:26px;
+}
+.about-copy h2 em{font-style:italic;color:var(--forest);}
+.about-copy p{color:var(--muted);font-size:0.94rem;line-height:1.95;margin-bottom:20px;}
+.about-values{
+  display:flex;gap:32px;
+  margin-top:40px;padding-top:36px;
+  border-top:1px solid var(--border);
+}
+.aval strong{
+  display:block;font-family:'Cormorant',serif;
+  font-size:2.6rem;font-weight:300;
+  color:var(--forest);line-height:1;margin-bottom:3px;
+}
+.aval span{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);}
+@media(max-width:960px){.about-inner{grid-template-columns:1fr;gap:56px;}.about-img-b{right:0;}.about-imgs{margin-bottom:32px;}}
+
+/* ── MENU ── */
+.menu-s{padding:110px 52px;background:var(--cream);}
+.sec-head{text-align:center;margin-bottom:60px;}
+.sec-head .ey{
+  font-size:0.72rem;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--sage-dark);
+  display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:18px;
+}
+.sec-head .ey::before,.sec-head .ey::after{content:'';width:32px;height:1px;background:var(--sage-dark);opacity:0.5;}
+.sec-head h2{
+  font-family:'Cormorant',serif;
+  font-size:clamp(2rem,4vw,3rem);font-weight:400;
+  color:var(--soil);line-height:1.1;margin-bottom:14px;
+}
+.sec-head h2 em{font-style:italic;color:var(--forest);}
+.sec-head p{color:var(--muted);font-size:0.9rem;max-width:480px;margin:0 auto;line-height:1.85;}
+
+.menu-tabs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;}
+.mtab{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:9px 26px;border-radius:40px;
+  cursor:pointer;font-family:'Outfit',sans-serif;
+  font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;
+  transition:all 0.22s;
+}
+.mtab:hover{border-color:var(--sage-dark);color:var(--forest);}
+.mtab.active{background:var(--forest);color:var(--cream);border-color:var(--forest);}
+
+.mpanel{display:none;}
+.mpanel.active{display:block;}
+.menu-body{max-width:1100px;margin:0 auto;}
+.mcat-head{
+  display:flex;align-items:center;gap:16px;margin-bottom:28px;margin-top:48px;
+}
+.mcat-head:first-child{margin-top:0;}
+.mcat-head h3{
+  font-family:'Cormorant',serif;font-size:1.5rem;font-weight:400;
+  color:var(--soil);white-space:nowrap;letter-spacing:0.03em;
+}
+.mcat-head::after{content:'';flex:1;height:1px;background:var(--border);}
+.mcat-icon{
+  width:32px;height:32px;
+  background:rgba(143,173,136,0.2);
+  border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.mcat-icon svg{width:15px;height:15px;stroke:var(--sage-dark);fill:none;stroke-width:1.5;stroke-linecap:round;}
+
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:6px;}
+.mcard{
+  background:var(--cream-mid);padding:26px 30px;
+  display:flex;justify-content:space-between;gap:20px;align-items:flex-start;
+  transition:background 0.2s;cursor:default;
+}
+.mcard:hover{background:var(--parchment);}
+.mcard h4{
+  font-family:'Cormorant',serif;font-size:1.15rem;font-weight:500;
+  color:var(--soil);margin-bottom:7px;
+}
+.mcard p{font-size:0.82rem;color:var(--muted);line-height:1.75;max-width:280px;}
+.mtag{
+  display:inline-block;margin-top:10px;
+  font-size:0.63rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--forest);background:rgba(45,90,39,0.09);
+  padding:3px 10px;border-radius:2px;
+}
+.mtag.r{color:var(--sage-dark);background:rgba(143,173,136,0.15);}
+.mprice{
+  font-family:'Cormorant',serif;font-size:1.25rem;font-weight:400;
+  color:var(--earth);white-space:nowrap;flex-shrink:0;padding-top:2px;
+}
+.menu-foot{text-align:center;margin-top:44px;font-size:0.82rem;color:var(--muted);letter-spacing:0.04em;}
+.menu-foot a{color:var(--forest);text-decoration:underline;text-underline-offset:3px;}
+@media(max-width:700px){.mgrid{grid-template-columns:1fr;}}
+@media(max-width:480px){.menu-s{padding:80px 24px;}}
+
+/* ── TASTING ── */
+.tasting{padding:110px 52px;background:var(--forest);}
+.tasting-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.tasting-text .ey{
+  font-size:0.72rem;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--sage-pale);display:flex;align-items:center;gap:12px;margin-bottom:22px;
+}
+.tasting-text .ey::before{content:'';width:24px;height:1px;background:var(--sage-pale);}
+.tasting-text h2{
+  font-family:'Cormorant',serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;
+  color:rgba(255,255,255,0.92);line-height:1.1;margin-bottom:22px;
+}
+.tasting-text h2 em{font-style:italic;color:var(--sage-pale);}
+.tasting-text p{color:rgba(255,255,255,0.48);font-size:0.92rem;line-height:1.9;margin-bottom:36px;}
+.tasting-price{
+  display:flex;align-items:baseline;gap:12px;margin-bottom:32px;
+}
+.tasting-price .amount{
+  font-family:'Cormorant',serif;font-size:3.5rem;font-weight:300;
+  color:var(--sage-pale);line-height:1;
+}
+.tasting-price .per{font-size:0.82rem;color:rgba(255,255,255,0.35);letter-spacing:0.1em;}
+.tasting-menu{display:flex;flex-direction:column;gap:0;}
+.tcourse{
+  display:flex;align-items:center;gap:20px;
+  padding:18px 0;border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.tcourse:first-child{border-top:1px solid rgba(255,255,255,0.07);}
+.tcourse-num{
+  font-family:'Cormorant',serif;font-size:1.3rem;font-weight:300;
+  color:rgba(255,255,255,0.18);width:28px;flex-shrink:0;
+}
+.tcourse-info h5{
+  font-family:'Cormorant',serif;font-size:1.05rem;font-weight:400;
+  color:rgba(255,255,255,0.82);margin-bottom:2px;
+}
+.tcourse-info p{font-size:0.78rem;color:rgba(255,255,255,0.35);line-height:1.5;}
+.tcourse-dot{width:6px;height:6px;border-radius:50%;background:var(--sage);margin-left:auto;flex-shrink:0;}
+@media(max-width:900px){.tasting-inner{grid-template-columns:1fr;gap:48px;}.tasting{padding:80px 28px;}}
+
+/* ── INGREDIENTS ── */
+.ingreds{padding:100px 52px;background:var(--cream-dark);}
+.ingreds-inner{max-width:1200px;margin:0 auto;}
+.ingreds-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px;}
+.icard{
+  background:var(--cream);padding:36px 28px;text-align:center;
+  transition:background 0.22s;position:relative;overflow:hidden;
+}
+.icard::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:3px;background:transparent;
+  transition:background 0.25s;
+}
+.icard:hover::before{background:var(--sage);}
+.icard:hover{background:var(--cream-mid);}
+.icard-img{
+  width:64px;height:64px;border-radius:50%;
+  background:rgba(143,173,136,0.15);
+  margin:0 auto 18px;
+  display:flex;align-items:center;justify-content:center;
+}
+.icard-img svg{width:30px;height:30px;stroke:var(--sage-dark);fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;}
+.icard h4{font-family:'Cormorant',serif;font-size:1.15rem;font-weight:500;color:var(--soil);margin-bottom:6px;}
+.icard .iloc{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:10px;}
+.icard p{font-size:0.82rem;color:var(--muted);line-height:1.75;}
+@media(max-width:900px){.ingreds-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.ingreds-grid{grid-template-columns:1fr;}}
+
+/* ── GALLERY ── */
+.gall{padding:100px 52px;background:var(--cream);}
+.gall-inner{max-width:1280px;margin:0 auto;}
+.gall-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:240px 240px;
+  gap:10px;margin-top:56px;
+}
+.gi{border-radius:10px;overflow:hidden;position:relative;}
+.gi img{width:100%;height:100%;object-fit:cover;transition:transform 0.65s ease;display:block;}
+.gi:hover img{transform:scale(1.06);}
+.gi-ov{position:absolute;inset:0;background:rgba(44,36,22,0);transition:background 0.3s;}
+.gi:hover .gi-ov{background:rgba(44,36,22,0.12);}
+.gi:nth-child(1){grid-column:1/5;grid-row:1/3;}
+.gi:nth-child(2){grid-column:5/8;grid-row:1/2;}
+.gi:nth-child(3){grid-column:8/13;grid-row:1/2;}
+.gi:nth-child(4){grid-column:5/9;grid-row:2/3;}
+.gi:nth-child(5){grid-column:9/13;grid-row:2/3;}
+@media(max-width:900px){
+  .gall-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
+  .gi{grid-column:auto!important;grid-row:auto!important;height:200px;}
+  .gi:nth-child(1){grid-column:1/3!important;}
+}
+@media(max-width:480px){.gall{padding:80px 24px;}}
+
+/* ── QUOTE ── */
+.qsec{
+  padding:110px 52px;
+  background:var(--sage-pale);
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.qsec::before,.qsec::after{
+  content:'';position:absolute;
+  width:300px;height:300px;
+  border-radius:50%;
+  background:rgba(45,90,39,0.07);
+}
+.qsec::before{top:-80px;left:-80px;}
+.qsec::after{bottom:-80px;right:-80px;}
+.qsec-inner{max-width:720px;margin:0 auto;position:relative;}
+.qmark{
+  font-family:'Cormorant',serif;font-size:8rem;font-weight:300;
+  color:rgba(45,90,39,0.15);line-height:0.6;margin-bottom:32px;display:block;
+}
+.qtext{
+  font-family:'Cormorant',serif;
+  font-size:clamp(1.5rem,3.5vw,2.4rem);
+  font-weight:300;font-style:italic;
+  color:var(--forest);line-height:1.55;margin-bottom:32px;
+}
+.qattr{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--sage-dark);}
+
+/* ── TESTIMONIALS ── */
+.testi{padding:100px 52px;background:var(--cream-mid);}
+.testi-grid{max-width:1060px;margin:60px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.tcard{background:var(--cream);padding:34px 28px;border-radius:12px;position:relative;}
+.tcard-leaf{
+  position:absolute;top:20px;right:20px;
+  width:32px;height:32px;opacity:0.15;
+}
+.tstars{color:var(--sage-dark);font-size:0.72rem;letter-spacing:4px;margin-bottom:16px;}
+.tcard q{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;font-style:italic;font-weight:400;
+  color:var(--soil);line-height:1.8;display:block;quotes:none;margin-bottom:26px;
+}
+.tcard-who{display:flex;align-items:center;gap:12px;}
+.tcard-av{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--forest);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant',serif;color:rgba(255,255,255,0.85);font-size:0.95rem;
+}
+.tcard-name{font-size:0.88rem;font-weight:400;color:var(--soil);}
+.tcard-role{font-size:0.74rem;color:var(--muted);}
+@media(max-width:800px){.testi-grid{grid-template-columns:1fr;max-width:500px;}}
+@media(max-width:480px){.testi{padding:80px 24px;}}
+
+/* ── RESERVATION ── */
+.reservation{padding:110px 52px;background:var(--cream);}
+.res-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1.45fr;gap:80px;align-items:start;}
+.res-info .ey{font-size:0.72rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--sage-dark);display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+.res-info .ey::before{content:'';width:24px;height:1px;background:var(--sage-dark);}
+.res-info h2{font-family:'Cormorant',serif;font-size:clamp(2rem,4vw,3rem);font-weight:400;color:var(--soil);margin-bottom:20px;line-height:1.1;}
+.res-info h2 em{font-style:italic;color:var(--forest);}
+.res-info p{color:var(--muted);font-size:0.9rem;line-height:1.9;margin-bottom:36px;}
+.hours{display:flex;flex-direction:column;gap:0;}
+.hrow{
+  display:flex;justify-content:space-between;
+  padding:13px 0;border-bottom:1px solid var(--border);
+  font-size:0.88rem;
+}
+.hrow:first-child{border-top:1px solid var(--border);}
+.hday{color:var(--soil);font-weight:400;}
+.htime{color:var(--muted);}
+.hclosed{color:rgba(44,36,22,0.28);}
+.res-note{
+  margin-top:24px;padding:16px 20px;
+  background:rgba(143,173,136,0.15);border-radius:8px;
+  font-size:0.82rem;color:var(--forest);line-height:1.6;
+}
+.res-note strong{font-weight:500;}
+
+.rform-wrap{
+  background:var(--cream-mid);
+  padding:48px;border-radius:16px;
+  box-shadow:0 24px 80px rgba(44,36,22,0.09);
+}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+.fg{display:flex;flex-direction:column;gap:8px;}
+.fg label{font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);}
+.fg input,.fg select,.fg textarea{
+  border:1px solid var(--border);
+  background:var(--cream);border-radius:6px;
+  padding:13px 17px;
+  font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:300;
+  color:var(--soil);outline:none;
+  transition:border-color 0.22s;width:100%;
+}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(44,36,22,0.28);}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--sage-dark);}
+.fg select{
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7060' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 17px center;
+}
+.fg textarea{resize:none;height:95px;}
+.fg-full{margin-bottom:18px;}
+.res-submit{width:100%;margin-top:10px;}
+.res-ok{
+  display:none;text-align:center;
+  background:rgba(45,90,39,0.1);color:var(--forest);
+  padding:16px;border-radius:8px;font-size:0.88rem;margin-top:14px;
+}
+.res-ok.show{display:block;}
+@media(max-width:960px){.res-inner{grid-template-columns:1fr;}.rform-wrap{padding:32px;}}
+@media(max-width:600px){.frow{grid-template-columns:1fr;}.reservation{padding:80px 24px;}}
+
+/* ── FOOTER ── */
+footer{background:var(--soil);color:rgba(247,243,237,0.45);padding:90px 52px 48px;}
+.footer-c{max-width:1280px;margin:0 auto;}
+.ftop{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:64px;}
+.fbrand{
+  font-family:'Cormorant',serif;font-size:2rem;font-weight:300;
+  color:rgba(247,243,237,0.9);
+  margin-bottom:14px;letter-spacing:0.1em;display:flex;align-items:center;gap:10px;
+}
+.fbrand svg{width:20px;height:20px;stroke:var(--sage);fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.ftagline{font-size:0.86rem;line-height:1.85;color:rgba(247,243,237,0.3);max-width:230px;}
+.fcol h5{font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(247,243,237,0.5);margin-bottom:20px;}
+.fcol ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.fcol ul li a{
+  font-size:0.87rem;color:rgba(247,243,237,0.32);
+  text-decoration:none;transition:color 0.2s;cursor:pointer;
+}
+.fcol ul li a:hover{color:rgba(247,243,237,0.82);}
+.faddr{font-style:normal;font-size:0.87rem;line-height:2.1;color:rgba(247,243,237,0.32);}
+.faddr a{color:rgba(247,243,237,0.45);text-decoration:none;}
+.faddr a:hover{color:rgba(247,243,237,0.9);}
+.fbot{
+  border-top:1px solid rgba(247,243,237,0.07);
+  padding-top:30px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+}
+.fcopy{font-size:0.78rem;color:rgba(247,243,237,0.22);}
+.fsocials{display:flex;gap:12px;}
+.fsocials a{
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid rgba(247,243,237,0.1);
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.22s;color:rgba(247,243,237,0.35);
+  text-decoration:none;
+}
+.fsocials a:hover{border-color:var(--sage);color:var(--sage-pale);}
+.fsocials svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+@media(max-width:900px){.ftop{grid-template-columns:1fr 1fr;gap:36px;}}
+@media(max-width:500px){.ftop{grid-template-columns:1fr;}.footer{padding:72px 24px 40px;}}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(28px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.rv.l{transform:translateX(-32px);}
+.rv.r{transform:translateX(32px);}
+.rv.up{transform:translateY(28px);}
+.rv.vis{opacity:1;transform:translate(0,0);}
+.d1{transition-delay:0.07s;}.d2{transition-delay:0.16s;}.d3{transition-delay:0.25s;}.d4{transition-delay:0.34s;}
+
+@keyframes fu{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-c">
+    <a href="#" class="nav-logo">
+      <svg class="nav-logo-leaf" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/>
+      </svg>
+      Botanica
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">Om os</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#tasting">Tasting</a></li>
+      <li><a href="#gallery">Galleri</a></li>
+      <li><a href="#reservation" class="nav-book">Book bord</a></li>
+    </ul>
+    <button class="ham" id="ham"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-nav" id="mobNav">
+  <button class="mob-close" id="mobClose">✕</button>
+  <a href="#about" class="ml">Om os</a>
+  <a href="#menu" class="ml">Menu</a>
+  <a href="#tasting" class="ml">Tasting</a>
+  <a href="#gallery" class="ml">Galleri</a>
+  <a href="#reservation" class="ml">Book bord</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- Botanical decorations -->
+  <div class="hero-botanicals">
+    <svg class="bot-tl" viewBox="0 0 400 400" fill="var(--sage-dark)" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="80" cy="200" rx="60" ry="120" transform="rotate(-40 80 200)"/>
+      <ellipse cx="160" cy="150" rx="45" ry="95" transform="rotate(-20 160 150)"/>
+      <ellipse cx="60" cy="120" rx="35" ry="80" transform="rotate(-55 60 120)"/>
+      <line x1="80" y1="260" x2="80" y2="380" stroke="var(--sage-dark)" stroke-width="2"/>
+      <ellipse cx="240" cy="300" rx="50" ry="100" transform="rotate(15 240 300)"/>
+      <ellipse cx="310" cy="340" rx="35" ry="70" transform="rotate(30 310 340)"/>
+    </svg>
+    <svg class="bot-br" viewBox="0 0 400 400" fill="var(--forest)" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="200" cy="150" rx="70" ry="140" transform="rotate(20 200 150)"/>
+      <ellipse cx="120" cy="200" rx="50" ry="100" transform="rotate(-10 120 200)"/>
+      <ellipse cx="300" cy="180" rx="40" ry="90" transform="rotate(35 300 180)"/>
+      <ellipse cx="250" cy="280" rx="55" ry="110" transform="rotate(-25 250 280)"/>
+    </svg>
+    <svg class="bot-tr" viewBox="0 0 200 200" fill="var(--sage-dark)" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="80" rx="40" ry="70" transform="rotate(10 100 80)"/>
+      <ellipse cx="60" cy="120" rx="28" ry="55" transform="rotate(-20 60 120)"/>
+    </svg>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">100% Plantebaseret · Organisk</div>
+      <h1 class="hero-h1">
+        Bota<br><em>nica</em>
+      </h1>
+      <p class="hero-sub">Et køkken der henter sin sjæl direkte fra naturen. Hvert måltid er en hyldest til planteverdenens overraskende rigdom og mangfoldighed.</p>
+      <div class="hero-ctas">
+        <a href="#menu" class="btn-filled">Se sæsonmenuen</a>
+        <a href="#tasting" class="btn-text">Tastingmenu</a>
+      </div>
+    </div>
+    <div class="hero-img-side">
+      <div class="hero-img-frame">
+        <img src="https://images.unsplash.com/photo-1767785990437-dfe1fe516fe8?auto=format&fit=crop&w=700&q=80" alt="Botanica køkken">
+        <div class="hero-img-badge">
+          <strong>100%</strong>
+          <span>Plantebaseret</span>
+        </div>
+        <div class="hero-img-float">
+          <svg viewBox="0 0 24 24">
+            <path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <div class="scroll-worm"></div>
+    <span>Udforsk</span>
+  </div>
+</section>
+
+<!-- PHILOSOPHY BAND -->
+<div class="philo">
+  <div class="philo-inner">
+    <div class="philo-item rv d1">
+      <div class="philo-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+      </div>
+      <h3>Ingen animalske produkter</h3>
+      <p>Alt hvad vi serverer er 100% plantebaseret — skabt for at bevise at naturen er tilstrækkelig i sig selv.</p>
+    </div>
+    <div class="philo-item rv d2">
+      <div class="philo-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <h3>Lokalt & organisk</h3>
+      <p>Vi samarbejder udelukkende med certificerede biodynamiske gårde inden for 100 km fra restauranten.</p>
+    </div>
+    <div class="philo-item rv d3">
+      <div class="philo-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h3>Nul madspild</h3>
+      <p>Vi bruger hele planten — rod, stilk, blad og blomst. Det der er til overs fermenteres, syltes eller tørres.</p>
+    </div>
+  </div>
+</div>
+
+<!-- WAVE -->
+<div class="wave" style="background:var(--forest);">
+  <svg viewBox="0 0 1440 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,32 Q240,64 480,24 Q720,-16 960,36 Q1200,80 1440,28 L1440,64 L0,64 Z" fill="var(--cream-mid)"/>
+  </svg>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-imgs rv l">
+      <div class="about-circle">
+        <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/></svg>
+      </div>
+      <img class="about-img-a" src="https://images.unsplash.com/photo-1592498546551-222538011a27?auto=format&fit=crop&w=700&q=80" alt="Køkkenchef">
+      <img class="about-img-b" src="https://images.unsplash.com/photo-1755811248324-3c9b7c8865fc?auto=format&fit=crop&w=300&q=80" alt="Plantebaseret anretning">
+    </div>
+    <div class="about-copy rv r">
+      <span class="ey">Vores filosofi</span>
+      <h2>Planterne er <em>altid nok</em></h2>
+      <p>Botanica åbnede i 2019 med en enkel, radikal hypotese: at planter, svampe, bønner, korn og haver kan skabe de mest komplekse, smagfulde og mindeværdige måltider.</p>
+      <p>Køkkenchef Mette Ørsted har trænet i Paris, Kyoto og Mexico City — og er vendt hjem til Danmark med en dybere forståelse for fermentering, forkulning og de teknikker der forvandler simple råvarer til noget ekstraordinært.</p>
+      <p>Vores restaurant er certificeret B-Corp og klimaneutral. Vi er ikke plantebaserede for modens skyld — vi er det fordi vi tror på det er rigtigt.</p>
+      <div class="about-values">
+        <div class="aval"><strong>18+</strong><span>Biodynamiske partnere</span></div>
+        <div class="aval"><strong>0</strong><span>Madspild pr. uge</span></div>
+        <div class="aval"><strong>100%</strong><span>Organisk</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu-s" id="menu">
+  <div class="sec-head rv">
+    <span class="ey">Sæsonens planter</span>
+    <h2>Vores <em>levende menu</em></h2>
+    <p>Menuen skifter med årstiderne og hvad vores producenter bringer. Det vi serverer i dag er det bedste vi kan finde i naturen nu.</p>
+  </div>
+  <div class="menu-body">
+    <div class="menu-tabs rv">
+      <button class="mtab active" data-t="sm">Sæsonmenu</button>
+      <button class="mtab" data-t="sm2">Snacks & småretter</button>
+      <button class="mtab" data-t="des">Desserter</button>
+      <button class="mtab" data-t="dri">Drikkevarer</button>
+    </div>
+
+    <!-- SÆSONMENU -->
+    <div class="mpanel active" id="tab-sm">
+      <div class="mcat-head">
+        <div class="mcat-icon"><svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/></svg></div>
+        <h3>Forretter</h3>
+      </div>
+      <div class="mgrid">
+        <div class="mcard"><div><h4>Syltede vilde blomster & skyr</h4><p>Biodynamisk skyr fra Egholm, konfiterede skovblomster, knuste hasselnødder og fermenteret honning.</p><span class="mtag">Rå</span></div><div class="mprice">145 kr</div></div>
+        <div class="mcard"><div><h4>Røget rødbede tartare</h4><p>Koldrøget over enebær, med syltet æble, peberrod-creme og ristede solsikkekerner.</p><span class="mtag r">Signatur</span></div><div class="mprice">155 kr</div></div>
+        <div class="mcard"><div><h4>Skovsvampebisque</h4><p>Koncentreret suppe af blandede skovsvampe med truffe-olie, fraiche og sprøde rugbrødschips.</p></div><div class="mprice">135 kr</div></div>
+        <div class="mcard"><div><h4>Hummus af sorte bønner</h4><p>Hjemmelavet med tahini, citron, ristet hvid-løg, granatæble og friske urter fra vores vindue.</p><span class="mtag">Rå</span></div><div class="mprice">125 kr</div></div>
+      </div>
+      <div class="mcat-head" style="margin-top:40px;">
+        <div class="mcat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="21"/><path d="M5 14h14"/></svg></div>
+        <h3>Hovedretter</h3>
+      </div>
+      <div class="mgrid">
+        <div class="mcard"><div><h4>Hel bagt knoldselleri</h4><p>48 timers saltning, bagt i egetræsaske, beurre blanc af plantemælk, syltede bær og valnødder.</p><span class="mtag r">Signatur</span></div><div class="mprice">265 kr</div></div>
+        <div class="mcard"><div><h4>Fermenteret tempeh & kimchi</h4><p>Hjemmelavet tempeh, 3-ugers kimchi, sort sesam, glaserede grøntsager og ristet sesamolie.</p><span class="mtag">Fermenteret</span></div><div class="mprice">245 kr</div></div>
+        <div class="mcard"><div><h4>Skovsvampe-risotto</h4><p>Carnaroli ris med kantareller, porcini og shiitake. Parmesancrème af cashews og frisk timian.</p></div><div class="mprice">255 kr</div></div>
+        <div class="mcard"><div><h4>Frisk pasta med trøffel</h4><p>Hjemmelavet tagliatelle, trøffelsmør af cashewnødder, svamperagù og frisk persille.</p></div><div class="mprice">275 kr</div></div>
+        <div class="mcard"><div><h4>Linsekoteletter & chimichurri</h4><p>Sorte linser og quinoa presset og grillet, med urte-chimichurri, bagte cherrytomater og rosmarin.</p></div><div class="mprice">235 kr</div></div>
+        <div class="mcard"><div><h4>Årets grøntsag</h4><p>Vi vælger én sæsongrøntsag og tilbereder den på 4 måder for at vise dens fulde potentiale.</p><span class="mtag r">Skiftende</span></div><div class="mprice">225 kr</div></div>
+      </div>
+    </div>
+
+    <!-- SNACKS -->
+    <div class="mpanel" id="tab-sm2">
+      <div class="mcat-head">
+        <div class="mcat-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <h3>Snacks & brød</h3>
+      </div>
+      <div class="mgrid">
+        <div class="mcard"><div><h4>Surdejsbrød & planteskim</h4><p>Hjemmebagt rugbrød med frisk surdej og plantebaseret skim med urter og flagesalt.</p></div><div class="mprice">55 kr</div></div>
+        <div class="mcard"><div><h4>Fermenterede grøntsager</h4><p>Skiftende udvalg af vores egne fermenteringer — kimchi, kombucha-reddiker, syltet blomkål.</p><span class="mtag">Fermenteret</span></div><div class="mprice">65 kr</div></div>
+        <div class="mcard"><div><h4>Skål med nødder & frø</h4><p>Ristede mandler, solsikkefrø, græskarkerner og tørrede tranebær med rosmarin og chili.</p></div><div class="mprice">45 kr</div></div>
+        <div class="mcard"><div><h4>Oliven & antipasto</h4><p>Marinerede oliven, syltede artiskok, kapers og soltørrede tomater med urter og citron.</p></div><div class="mprice">75 kr</div></div>
+      </div>
+    </div>
+
+    <!-- DESSERTER -->
+    <div class="mpanel" id="tab-des">
+      <div class="mcat-head">
+        <div class="mcat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2"/></svg></div>
+        <h3>Søde slut</h3>
+      </div>
+      <div class="mgrid">
+        <div class="mcard"><div><h4>Havtorn panna cotta</h4><p>Kokosmælk-panna cotta, havtornsgelé, karamelliseret hvid chokolade og syltede bær.</p><span class="mtag r">Signatur</span></div><div class="mprice">115 kr</div></div>
+        <div class="mcard"><div><h4>Mørk chokolademousse</h4><p>72% Valrhona rørt til skum med aquafaba, flagesalt, hindbærsorbet og knas af korn.</p></div><div class="mprice">105 kr</div></div>
+        <div class="mcard"><div><h4>Bagt pære & ingefær</h4><p>Pocheret pære, frisk ingefær-is, kandiserede valnødder og birkesirup.</p></div><div class="mprice">95 kr</div></div>
+        <div class="mcard"><div><h4>Oste fra Vesterhavskysten</h4><p>Plantebaserede oste lavet på cashew, mandel og macadamia. Med knækbrød, honning og figensyltetøj.</p></div><div class="mprice">145 kr</div></div>
+      </div>
+    </div>
+
+    <!-- DRIKKEVARER -->
+    <div class="mpanel" id="tab-dri">
+      <div class="mcat-head">
+        <div class="mcat-icon"><svg viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg></div>
+        <h3>Drikke & vine</h3>
+      </div>
+      <div class="mgrid">
+        <div class="mcard"><div><h4>Naturvinsmenu · 3 glas</h4><p>Biodynamiske vine valgt til sæsonmenuen. Alle vine er vegancertificerede.</p></div><div class="mprice">295 kr</div></div>
+        <div class="mcard"><div><h4>Alkoholfri parringsmenu</h4><p>3 glas kombucha, fermenterede safter og botaniske infusioner tilpasset menuens smagsnoter.</p><span class="mtag">Anbefalet</span></div><div class="mprice">195 kr</div></div>
+        <div class="mcard"><div><h4>Botanica Kombucha</h4><p>Hjemmebrygget kombucha i skiftende smagskombinatoner. Spørg tjeneren om dagens udgave.</p><span class="mtag">Hjemmelavet</span></div><div class="mprice">65 kr</div></div>
+        <div class="mcard"><div><h4>Urtete & koldbrygget kaffe</h4><p>Teer af urter fra vores have eller koldbrygget specialkaffe fra Prolog Coffee Bar.</p></div><div class="mprice">55 kr</div></div>
+      </div>
+    </div>
+
+    <p class="menu-foot rv">Hele menuen er 100% plantebaseret. Allergier & intolerance — tal med vores personale. · <a href="#tasting">Se vores tastingmenu</a> for den fulde sæsonfortælling.</p>
+  </div>
+</section>
+
+<!-- TASTING MENU -->
+<section class="tasting" id="tasting">
+  <div class="tasting-inner">
+    <div class="tasting-text rv l">
+      <span class="ey">Den fulde oplevelse</span>
+      <h2>Botanica <em>Tasting</em></h2>
+      <p>En 7-retters rejse gennem sæsonens planter — designet som en sammenhængende fortælling fra haven til bordet. Ændres hver 6–8 uge.</p>
+      <div class="tasting-price">
+        <span class="amount">795</span>
+        <span class="per">kr. pr. kuvert</span>
+      </div>
+      <a href="#reservation" class="btn-filled">Book tastingoplevelsen</a>
+    </div>
+    <div class="rv r">
+      <div class="tasting-menu">
+        <div class="tcourse"><span class="tcourse-num">01</span><div class="tcourse-info"><h5>Velkomstsnacks fra haven</h5><p>Sæsonens første smagsnoter — rå, tørrede og fermenterede</p></div><span class="tcourse-dot"></span></div>
+        <div class="tcourse"><span class="tcourse-num">02</span><div class="tcourse-info"><h5>Kolde retter & sylterier</h5><p>Syv mundfulde der fortæller om bevaring og transformation</p></div><span class="tcourse-dot"></span></div>
+        <div class="tcourse"><span class="tcourse-num">03</span><div class="tcourse-info"><h5>Havens første</h5><p>Det tidligste og friskeste fra marken og skoven</p></div><span class="tcourse-dot"></span></div>
+        <div class="tcourse"><span class="tcourse-num">04</span><div class="tcourse-info"><h5>Sæsonens grøntsag</h5><p>Én grøntsag tilberedt på fire forskellige måder</p></div><span class="tcourse-dot"></span></div>
+        <div class="tcourse"><span class="tcourse-num">05</span><div class="tcourse-info"><h5>Svampe & fermentering</h5><p>Umami i dybde — miso, tempeh og levende kulturer</p></div><span class="tcourse-dot"></span></div>
+        <div class="tcourse"><span class="tcourse-num">06</span><div class="tcourse-info"><h5>Forkullet & rodfæstet</h5><p>Varme retter med dybe brændte og karameliserede smagsnoter</p></div><span class="tcourse-dot"></span></div>
+        <div class="tcourse"><span class="tcourse-num">07</span><div class="tcourse-info"><h5>Sødt finale</h5><p>To desserter og petit fours af sæsonens frugter og urter</p></div><span class="tcourse-dot"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INGREDIENTS -->
+<section class="ingreds">
+  <div class="ingreds-inner">
+    <div class="sec-head rv">
+      <span class="ey">Fra naturen til dig</span>
+      <h2>Vores <em>producenter</em></h2>
+      <p>Vi kender alle vores leverandører personligt. Hvert ingrediens har en adresse, et ansigt og en historie.</p>
+    </div>
+    <div class="ingreds-grid">
+      <div class="icard rv d1">
+        <div class="icard-img">
+          <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/></svg>
+        </div>
+        <h4>Urtefolket</h4>
+        <div class="iloc">Fyn · 115 km</div>
+        <p>Biodynamiske urter, spiselige blomster og vilde planter. Dyrket uden pesticider siden 2004.</p>
+      </div>
+      <div class="icard rv d2">
+        <div class="icard-img">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h4>Lindbjerg Gård</h4>
+        <div class="iloc">Sjælland · 38 km</div>
+        <p>Rodfrugter, kål og vinterprodukter. Demeter-certificeret biodynamisk landbrug.</p>
+      </div>
+      <div class="icard rv d3">
+        <div class="icard-img">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <h4>Skovsvampe ApS</h4>
+        <div class="iloc">Nordsjælland · 52 km</div>
+        <p>Kontrolleret skovsvampeplukning og dyrkning af shiitake, østers og lion's mane.</p>
+      </div>
+      <div class="icard rv d4">
+        <div class="icard-img">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h4>Vores egen have</h4>
+        <div class="iloc">200m fra restauranten</div>
+        <p>En 400 m² have bag restauranten med krydderurter, blomster, bær og vintergrøntsager.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gall" id="gallery">
+  <div class="gall-inner">
+    <div class="sec-head rv">
+      <span class="ey">Billeder fra botanica</span>
+      <h2>Hvad venter <em>dig</em></h2>
+    </div>
+    <div class="gall-grid">
+      <div class="gi rv d1"><img src="https://images.unsplash.com/photo-1557267725-c530b236f446?auto=format&fit=crop&w=800&q=80" alt="Ret"><div class="gi-ov"></div></div>
+      <div class="gi rv d2"><img src="https://images.unsplash.com/photo-1755811248324-3c9b7c8865fc?auto=format&fit=crop&w=600&q=80" alt="Anretning"><div class="gi-ov"></div></div>
+      <div class="gi rv d3"><img src="https://images.unsplash.com/photo-1529042355636-0f06afe127a9?auto=format&fit=crop&w=600&q=80" alt="Pasta"><div class="gi-ov"></div></div>
+      <div class="gi rv d2"><img src="https://images.unsplash.com/photo-1712746784067-e9e1bd86c043?auto=format&fit=crop&w=600&q=80" alt="Grøn ret"><div class="gi-ov"></div></div>
+      <div class="gi rv d3"><img src="https://images.unsplash.com/photo-1607257882338-70f7dd2ae344?auto=format&fit=crop&w=600&q=80" alt="Dessert"><div class="gi-ov"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="qsec">
+  <div class="qsec-inner rv">
+    <span class="qmark">&ldquo;</span>
+    <p class="qtext">Planter er ikke et fravalg — de er en verden af kompleksitet vi endnu ikke har kortlagt til fulde. Det er det der driver os.</p>
+    <div class="qattr">— Mette Ørsted, Køkkenchef & grundlægger</div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testi">
+  <div style="max-width:1060px;margin:0 auto;">
+    <div class="sec-head rv">
+      <span class="ey">Vores gæster</span>
+      <h2>Ord fra bordet</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="tcard rv d1">
+        <svg class="tcard-leaf" viewBox="0 0 24 24" stroke="var(--forest)" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/>
+        </svg>
+        <div class="tstars">★★★★★</div>
+        <q>Jeg er ikke veganer, og alligevel var det det bedste måltid jeg har fået i 2024. Knoldsellerien vil jeg huske resten af mit liv.</q>
+        <div class="tcard-who">
+          <div class="tcard-av">MN</div>
+          <div><div class="tcard-name">Martin Nielsen</div><div class="tcard-role">Gastronom · København</div></div>
+        </div>
+      </div>
+      <div class="tcard rv d2">
+        <svg class="tcard-leaf" viewBox="0 0 24 24" stroke="var(--forest)" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/>
+        </svg>
+        <div class="tstars">★★★★★</div>
+        <q>Botanica har ændret måden jeg tænker om mad på. Ikke ved at prædike, men ved at servere noget der er uomtvisteligt smukt og godt.</q>
+        <div class="tcard-who">
+          <div class="tcard-av">AK</div>
+          <div><div class="tcard-name">Anna Kristensen</div><div class="tcard-role">Madblogger · Aarhus</div></div>
+        </div>
+      </div>
+      <div class="tcard rv d3">
+        <svg class="tcard-leaf" viewBox="0 0 24 24" stroke="var(--forest)" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/>
+        </svg>
+        <div class="tstars">★★★★★</div>
+        <q>Vi tog vores veganske venner med og alle var enige: det er det bedste de nogensinde har smagt. Alkoholfri parringsmenu var en åbenbaring.</q>
+        <div class="tcard-who">
+          <div class="tcard-av">JL</div>
+          <div><div class="tcard-name">Julie & Lars</div><div class="tcard-role">Årsdag · Botanica</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVATION -->
+<section class="reservation" id="reservation">
+  <div class="res-inner">
+    <div class="res-info rv l">
+      <span class="ey">Book et bord</span>
+      <h2>En aften i <em>planternes tegn</em></h2>
+      <p>Vi holder 38 kuverter og anbefaler reservation. Tastingmenuen bør bookes mindst 48 timer i forvejen — vi forbereder alt fra bunden til dig.</p>
+      <div class="hours">
+        <div class="hrow"><span class="hday">Tirsdag – Torsdag</span><span class="htime">17:30 – 22:00</span></div>
+        <div class="hrow"><span class="hday">Fredag – Lørdag</span><span class="htime">17:00 – 23:00</span></div>
+        <div class="hrow"><span class="hday">Søndag</span><span class="htime">12:00 – 16:00 (frokost)</span></div>
+        <div class="hrow"><span class="hday">Mandag</span><span class="hclosed">Lukket</span></div>
+      </div>
+      <div class="res-note">
+        <strong>Om tastingmenuen:</strong> Vi beder om mindst 48 timers varsel til 7-retters tastingoplevelsen, så vi kan forberede alt fra bunden specielt til dit bord.
+      </div>
+    </div>
+    <div class="rv r">
+      <div class="rform-wrap">
+        <form id="resForm" novalidate>
+          <div class="frow">
+            <div class="fg"><label>Navn</label><input type="text" placeholder="Dit fulde navn" required></div>
+            <div class="fg"><label>Telefon</label><input type="tel" placeholder="+45 00 00 00 00"></div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>E-mail</label><input type="email" placeholder="din@email.dk" required></div>
+            <div class="fg"><label>Antal gæster</label>
+              <select>
+                <option>1 gæst</option><option selected>2 gæster</option>
+                <option>3 gæster</option><option>4 gæster</option>
+                <option>5 gæster</option><option>6 gæster</option>
+                <option>Selskab 7+ — ring til os</option>
+              </select>
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>Dato</label><input type="date" required></div>
+            <div class="fg"><label>Tidspunkt</label>
+              <select>
+                <option>17:00</option><option>17:30</option><option>18:00</option>
+                <option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option>
+              </select>
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>Menu</label>
+              <select>
+                <option>À la carte</option>
+                <option>Botanica Tasting · 7 retter (795 kr)</option>
+                <option>Botanica Tasting · alkoholfri parring (+195 kr)</option>
+              </select>
+            </div>
+            <div class="fg"><label>Drikke</label>
+              <select>
+                <option>Ingen forudvalg</option>
+                <option>Naturvinsmenu (295 kr)</option>
+                <option>Alkoholfri parringsmenu (195 kr)</option>
+              </select>
+            </div>
+          </div>
+          <div class="fg fg-full"><label>Allergier, ønsker & bemærkninger</label><textarea placeholder="Fortæl os om allergier, fødselsdage, særlige ønsker eller diæt..."></textarea></div>
+          <button type="submit" class="btn-filled res-submit">Send reservationsanmodning</button>
+          <div class="res-ok" id="resOk">Tusind tak! Vi bekræfter din reservation inden for 24 timer på den angivne e-mail. Vi glæder os til at se dig.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-c">
+    <div class="ftop">
+      <div>
+        <div class="fbrand">
+          <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/></svg>
+          Botanica
+        </div>
+        <p class="ftagline">Et 100% plantebaseret køkken i hjertet af København — siden 2019. Organisk, biodynamisk og med kærlighed til naturen.</p>
+      </div>
+      <div class="fcol">
+        <h5>Navigation</h5>
+        <ul>
+          <li><a onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">Om os</a></li>
+          <li><a onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Menu</a></li>
+          <li><a onclick="document.getElementById('tasting').scrollIntoView({behavior:'smooth'})">Tastingmenu</a></li>
+          <li><a onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">Galleri</a></li>
+          <li><a onclick="document.getElementById('reservation').scrollIntoView({behavior:'smooth'})">Reservér</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h5>Find os</h5>
+        <address class="faddr">
+          Gothersgade 55<br>1123 København K<br><br>
+          <a href="tel:+4533445566">+45 33 44 55 66</a><br>
+          <a href="mailto:bord@botanica.dk">bord@botanica.dk</a>
+        </address>
+      </div>
+      <div class="fcol">
+        <h5>Åbningstider</h5>
+        <ul>
+          <li><a>Tir–tor: 17:30–22:00</a></li>
+          <li><a>Fre–lør: 17:00–23:00</a></li>
+          <li><a>Søn: 12:00–16:00</a></li>
+          <li><a style="opacity:0.3;">Mandag: Lukket</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <span class="fcopy">© 2026 Botanica. Alle rettigheder forbeholdes. · B-Corp certificeret · Klimaneutral</span>
+      <div class="fsocials">
+        <a href="#" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="#" aria-label="Pinterest">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.18-.77 1.22-5.17 1.22-5.17s-.31-.62-.31-1.54c0-1.45.84-2.53 1.88-2.53.89 0 1.32.67 1.32 1.47 0 .9-.57 2.24-.87 3.48-.25 1.04.52 1.88 1.54 1.88 1.85 0 3.27-1.95 3.27-4.77 0-2.49-1.79-4.24-4.35-4.24-2.96 0-4.7 2.22-4.7 4.52 0 .9.34 1.85.77 2.38.08.1.09.19.07.29-.08.33-.26 1.04-.29 1.18-.05.19-.16.23-.38.14-1.39-.65-2.26-2.68-2.26-4.32 0-3.51 2.55-6.74 7.36-6.74 3.86 0 6.86 2.75 6.86 6.42 0 3.83-2.41 6.91-5.76 6.91-1.12 0-2.18-.58-2.54-1.27l-.69 2.58c-.25.97-.93 2.18-1.39 2.92.05.02.1.03.15.05C12.14 22 12.07 22 12 22c-5.52 0-10-4.48-10-10S6.48 2 12 2z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+
+document.getElementById('ham').addEventListener('click',()=>document.getElementById('mobNav').classList.add('open'));
+document.getElementById('mobClose').addEventListener('click',()=>document.getElementById('mobNav').classList.remove('open'));
+document.querySelectorAll('.ml').forEach(l=>l.addEventListener('click',()=>document.getElementById('mobNav').classList.remove('open')));
+
+document.querySelectorAll('.mtab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.mpanel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.t).classList.add('active');
+  });
+});
+
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');ro.unobserve(e.target);}});
+},{threshold:0.1});
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+
+document.getElementById('resForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const ok=document.getElementById('resOk');
+  ok.classList.add('show');
+  e.target.reset();
+  setTimeout(()=>ok.classList.remove('show'),7000);
+});
+</script>
+</body>
+</html>

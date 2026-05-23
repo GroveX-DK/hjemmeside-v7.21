@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skov & Mark — Fra mark til bord</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --linen:#ece5da;
+  --linen-dark:#ddd4c5;
+  --linen-light:#f5f0e8;
+  --forest:#4a6e32;
+  --forest-dark:#2d4a1e;
+  --forest-light:#5d8940;
+  --bark:#8b6b4a;
+  --bark-light:#b89070;
+  --soil:#3a2d1e;
+  --muted:#7a6a55;
+  --cream:#faf7f2;
+  --white:#ffffff;
+  --border:rgba(58,45,30,0.12);
+}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--linen);
+  color:var(--soil);
+  font-family:'Jost',sans-serif;
+  font-weight:300;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* GRAIN OVERLAY */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:999;
+  pointer-events:none;
+  opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--linen);}
+::-webkit-scrollbar-thumb{background:var(--forest);border-radius:99px;}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:28px 0;
+  transition:all 0.5s ease;
+}
+nav.scrolled{
+  background:rgba(236,229,218,0.94);
+  backdrop-filter:blur(14px);
+  padding:16px 0;
+  border-bottom:1px solid var(--border);
+}
+.nav-wrap{max-width:1240px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between;}
+.nav-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.45rem;
+  font-weight:500;
+  letter-spacing:0.08em;
+  color:var(--soil);
+  text-decoration:none;
+}
+.nav-brand em{font-style:italic;color:var(--forest);}
+.nav-links{display:flex;align-items:center;gap:40px;list-style:none;}
+.nav-links a{
+  text-decoration:none;
+  color:var(--muted);
+  font-size:0.8rem;
+  font-weight:400;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  transition:color 0.25s;
+}
+.nav-links a:hover{color:var(--forest);}
+.nav-reserve{
+  background:var(--forest);
+  color:var(--cream)!important;
+  padding:10px 26px;
+  border-radius:2px;
+  letter-spacing:0.12em!important;
+  transition:background 0.25s!important;
+}
+.nav-reserve:hover{background:var(--forest-dark)!important;}
+.hamburger{display:none;flex-direction:column;gap:6px;background:none;border:none;cursor:pointer;padding:4px;}
+.hamburger span{width:22px;height:1px;background:var(--soil);transition:all 0.3s;display:block;}
+.mob-nav{display:none;}
+@media(max-width:800px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .mob-nav.open{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    position:fixed;inset:0;background:var(--cream);z-index:200;
+  }
+  .mob-nav a{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--soil);text-decoration:none;padding:14px;letter-spacing:0.04em;}
+  .mob-nav a:hover{color:var(--forest);}
+  .mob-close{position:absolute;top:28px;right:28px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted);}
+}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  position:relative;
+  overflow:hidden;
+}
+.hero-left{
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:180px 64px 100px 64px;
+  position:relative;
+  z-index:2;
+}
+.hero-right{
+  position:relative;
+  overflow:hidden;
+}
+.hero-right img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  transform:scale(1.03);
+  transition:transform 8s ease;
+}
+.hero-right img.loaded{transform:scale(1);}
+.hero-right::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(to right,var(--linen) 0%,transparent 30%);
+  z-index:1;
+}
+.hero-label{
+  font-size:0.72rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--forest);
+  margin-bottom:28px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  opacity:0;
+  animation:fadeUp 0.7s ease 0.3s forwards;
+}
+.hero-label::before{
+  content:'';
+  width:32px;
+  height:1px;
+  background:var(--forest);
+  flex-shrink:0;
+}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(4rem,8vw,7.5rem);
+  font-weight:300;
+  line-height:0.9;
+  letter-spacing:-0.01em;
+  color:var(--soil);
+  margin-bottom:36px;
+  opacity:0;
+  animation:fadeUp 0.9s ease 0.5s forwards;
+}
+.hero-title .amp{
+  font-style:italic;
+  color:var(--forest);
+  font-size:0.85em;
+}
+.hero-title .mark{display:block;padding-left:60px;}
+.hero-desc{
+  font-size:1rem;
+  color:var(--muted);
+  max-width:380px;
+  line-height:1.85;
+  margin-bottom:48px;
+  opacity:0;
+  animation:fadeUp 0.9s ease 0.7s forwards;
+}
+.hero-actions{
+  display:flex;gap:16px;align-items:center;
+  opacity:0;
+  animation:fadeUp 0.9s ease 0.9s forwards;
+}
+.btn-solid{
+  background:var(--forest);
+  color:var(--cream);
+  padding:14px 36px;
+  border:none;
+  border-radius:2px;
+  font-family:'Jost',sans-serif;
+  font-size:0.8rem;
+  font-weight:400;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  transition:background 0.25s;
+  display:inline-block;
+}
+.btn-solid:hover{background:var(--forest-dark);}
+.btn-ghost{
+  font-size:0.8rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:color 0.25s;
+}
+.btn-ghost:hover{color:var(--forest);}
+.btn-ghost::after{content:'↓';}
+.hero-scroll{
+  position:absolute;
+  bottom:48px;left:64px;
+  display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+  opacity:0;animation:fadeUp 1s ease 1.2s forwards;
+}
+.hero-scroll span{font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);}
+.scroll-track{width:1px;height:56px;background:var(--linen-dark);position:relative;overflow:hidden;}
+.scroll-fill{position:absolute;top:0;left:0;width:100%;background:var(--forest);animation:scrollDrop 2s ease-in-out infinite;}
+@keyframes scrollDrop{0%{height:0;top:0;}50%{height:100%;top:0;}100%{height:0;top:100%;}}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:auto;}
+  .hero-left{padding:140px 32px 60px;}
+  .hero-right{height:420px;}
+  .hero-right::after{background:linear-gradient(to bottom,var(--linen) 0%,transparent 30%);}
+  .hero-scroll{left:32px;}
+}
+
+/* MANIFESTO */
+.manifesto{background:var(--forest-dark);padding:80px 48px;position:relative;overflow:hidden;}
+.manifesto::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(ellipse at 20% 50%,rgba(74,110,50,0.4) 0%,transparent 60%),
+                   radial-gradient(ellipse at 80% 30%,rgba(74,110,50,0.2) 0%,transparent 50%);
+}
+.manifesto-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;position:relative;}
+.man-item{padding:48px 40px;border-right:1px solid rgba(255,255,255,0.08);}
+.man-item:last-child{border-right:none;}
+.man-num{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:300;color:rgba(255,255,255,0.12);line-height:1;margin-bottom:18px;}
+.man-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:rgba(255,255,255,0.9);margin-bottom:12px;letter-spacing:0.02em;}
+.man-text{font-size:0.87rem;color:rgba(255,255,255,0.45);line-height:1.85;}
+@media(max-width:700px){.manifesto-inner{grid-template-columns:1fr;}.man-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);padding:32px 24px;}}
+
+/* DIVIDER */
+.organic-divider{line-height:0;overflow:hidden;}
+.organic-divider svg{display:block;width:100%;}
+
+/* ABOUT */
+.about{padding:110px 48px;background:var(--linen);}
+.about-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.1fr 1fr;gap:100px;align-items:center;}
+.about-visual{position:relative;}
+.about-img-main{
+  width:100%;height:560px;
+  object-fit:cover;
+  border-radius:0 60px 0 0;
+  display:block;
+}
+.about-img-inset{
+  position:absolute;
+  bottom:-40px;right:-40px;
+  width:220px;height:280px;
+  object-fit:cover;
+  border-radius:0 0 0 40px;
+  border:8px solid var(--linen);
+  box-shadow:0 20px 60px rgba(58,45,30,0.2);
+}
+.about-leaf{
+  position:absolute;
+  top:-30px;left:-30px;
+  width:80px;height:80px;
+  background:var(--forest);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.about-leaf svg{width:36px;height:36px;fill:rgba(255,255,255,0.7);}
+.about-text .eyebrow{
+  font-size:0.72rem;
+  letter-spacing:0.26em;
+  text-transform:uppercase;
+  color:var(--forest);
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:24px;
+}
+.about-text .eyebrow::after{content:'';flex:1;height:1px;background:var(--forest);opacity:0.3;max-width:50px;}
+.about-text h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.2rem,4vw,3.2rem);
+  font-weight:400;
+  color:var(--soil);
+  margin-bottom:28px;
+  line-height:1.1;
+}
+.about-text h2 em{font-style:italic;color:var(--forest);}
+.about-text p{color:var(--muted);margin-bottom:20px;font-size:0.95rem;line-height:1.9;}
+.about-stats{
+  display:flex;gap:40px;
+  margin-top:44px;
+  padding-top:36px;
+  border-top:1px solid var(--border);
+}
+.astat strong{
+  display:block;
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.8rem;
+  font-weight:300;
+  color:var(--forest);
+  line-height:1;
+  margin-bottom:4px;
+}
+.astat span{font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+@media(max-width:1000px){.about-inner{grid-template-columns:1fr;gap:60px;}.about-img-inset{right:0;bottom:-20px;}}
+
+/* SEASON STRIP */
+.season-strip{background:var(--linen-dark);padding:36px 48px;}
+.season-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:48px;}
+.season-label{font-size:0.72rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.season-items{display:flex;gap:0;flex:1;}
+.season-item{
+  flex:1;
+  padding:20px 28px;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all 0.25s;
+  text-align:center;
+}
+.season-item.active{border-bottom-color:var(--forest);}
+.season-item h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--soil);margin-bottom:4px;}
+.season-item p{font-size:0.78rem;color:var(--muted);}
+.season-item.active h4{color:var(--forest);}
+@media(max-width:700px){.season-strip{padding:24px;}.season-inner{flex-direction:column;gap:16px;}.season-items{width:100%;}}
+
+/* MENU */
+.menu-section{padding:100px 48px;background:var(--cream);}
+.section-head{max-width:600px;margin:0 auto 64px;text-align:center;}
+.section-head .eyebrow{
+  font-size:0.72rem;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--forest);display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;
+}
+.section-head .eyebrow::before,.section-head .eyebrow::after{content:'';flex:1;height:1px;background:var(--forest);opacity:0.25;max-width:40px;}
+.section-head h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:400;color:var(--soil);line-height:1.1;margin-bottom:16px;}
+.section-head h2 em{font-style:italic;color:var(--forest);}
+.section-head p{color:var(--muted);font-size:0.9rem;line-height:1.85;}
+.menu-body{max-width:1100px;margin:0 auto;}
+.menu-cat{margin-bottom:72px;}
+.menu-cat-head{
+  display:flex;align-items:center;gap:20px;
+  margin-bottom:32px;
+}
+.menu-cat-head h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.6rem;
+  font-weight:400;
+  color:var(--soil);
+  white-space:nowrap;
+}
+.menu-cat-head::after{content:'';flex:1;height:1px;background:var(--border);}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.menu-card{
+  background:var(--white);
+  padding:28px 32px;
+  display:flex;
+  gap:24px;
+  justify-content:space-between;
+  align-items:flex-start;
+  transition:background 0.2s;
+  cursor:default;
+}
+.menu-card:hover{background:var(--linen-light);}
+.mc-left h4{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.2rem;
+  font-weight:500;
+  color:var(--soil);
+  margin-bottom:7px;
+}
+.mc-left p{font-size:0.83rem;color:var(--muted);line-height:1.7;max-width:300px;}
+.mc-tag{
+  display:inline-block;
+  font-size:0.65rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--forest);
+  background:rgba(74,110,50,0.1);
+  padding:3px 10px;
+  border-radius:1px;
+  margin-top:10px;
+}
+.mc-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.3rem;
+  font-weight:400;
+  color:var(--bark);
+  white-space:nowrap;
+  flex-shrink:0;
+  padding-top:2px;
+}
+.menu-note{text-align:center;margin-top:48px;font-size:0.82rem;color:var(--muted);letter-spacing:0.04em;}
+.menu-note a{color:var(--forest);text-decoration:underline;text-underline-offset:3px;}
+@media(max-width:700px){.menu-grid{grid-template-columns:1fr;}}
+
+/* PRODUCERS */
+.producers{padding:100px 48px;background:var(--linen);}
+.prod-inner{max-width:1100px;margin:0 auto;}
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:56px;}
+.prod-card{
+  background:var(--cream);
+  padding:36px 28px;
+  text-align:center;
+  transition:background 0.2s;
+}
+.prod-card:hover{background:var(--white);}
+.prod-icon{
+  width:56px;height:56px;
+  background:rgba(74,110,50,0.1);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;
+}
+.prod-icon svg{width:26px;height:26px;stroke:var(--forest);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.prod-card h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--soil);margin-bottom:6px;}
+.prod-card .prod-loc{font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--forest);margin-bottom:10px;}
+.prod-card p{font-size:0.82rem;color:var(--muted);line-height:1.7;}
+@media(max-width:800px){.prod-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.prod-grid{grid-template-columns:1fr;}}
+
+/* QUOTE SECTION */
+.quote-section{
+  padding:110px 48px;
+  background:var(--forest);
+  position:relative;overflow:hidden;
+  text-align:center;
+}
+.quote-section::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(ellipse at 10% 90%,rgba(45,74,30,0.6) 0%,transparent 50%),
+                   radial-gradient(ellipse at 90% 10%,rgba(45,74,30,0.4) 0%,transparent 40%);
+}
+.quote-inner{max-width:760px;margin:0 auto;position:relative;}
+.quote-mark{
+  font-family:'Cormorant Garamond',serif;
+  font-size:12rem;
+  color:rgba(255,255,255,0.07);
+  line-height:0.5;
+  margin-bottom:40px;
+  pointer-events:none;
+}
+.quote-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,3.5vw,2.6rem);
+  font-weight:300;
+  font-style:italic;
+  color:rgba(255,255,255,0.9);
+  line-height:1.5;
+  letter-spacing:0.01em;
+  margin-bottom:36px;
+}
+.quote-attr{font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);}
+
+/* GALLERY */
+.gallery{padding:100px 48px;background:var(--linen-dark);}
+.gallery-inner{max-width:1200px;margin:0 auto;}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:280px 280px;
+  gap:10px;
+  margin-top:56px;
+}
+.gi{overflow:hidden;border-radius:4px;position:relative;}
+.gi img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease;display:block;}
+.gi:hover img{transform:scale(1.06);}
+.gi:nth-child(1){grid-column:1/5;grid-row:1/3;}
+.gi:nth-child(2){grid-column:5/9;grid-row:1/2;}
+.gi:nth-child(3){grid-column:9/13;grid-row:1/2;}
+.gi:nth-child(4){grid-column:5/8;grid-row:2/3;}
+.gi:nth-child(5){grid-column:8/13;grid-row:2/3;}
+.gi-overlay{position:absolute;inset:0;background:rgba(58,45,30,0);transition:background 0.3s;}
+.gi:hover .gi-overlay{background:rgba(58,45,30,0.15);}
+@media(max-width:900px){
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
+  .gi{grid-column:auto!important;grid-row:auto!important;height:220px;}
+}
+
+/* EXPERIENCE */
+.experience{padding:100px 48px;background:var(--cream);}
+.exp-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.exp-text .eyebrow{font-size:0.72rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--forest);display:flex;align-items:center;gap:14px;margin-bottom:24px;}
+.exp-text .eyebrow::after{content:'';width:30px;height:1px;background:var(--forest);opacity:0.4;}
+.exp-text h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:400;color:var(--soil);margin-bottom:24px;line-height:1.1;}
+.exp-text h2 em{font-style:italic;color:var(--forest);}
+.exp-text p{color:var(--muted);font-size:0.92rem;line-height:1.9;margin-bottom:18px;}
+.exp-items{display:flex;flex-direction:column;gap:0;}
+.exp-item{
+  padding:24px 0;
+  border-bottom:1px solid var(--border);
+  display:flex;gap:20px;align-items:flex-start;
+  cursor:pointer;
+}
+.exp-item:first-child{border-top:1px solid var(--border);}
+.exp-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;
+  color:var(--forest);
+  opacity:0.4;
+  line-height:1;
+  width:32px;flex-shrink:0;
+  padding-top:2px;
+  font-weight:300;
+}
+.exp-item-text h4{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--soil);margin-bottom:4px;}
+.exp-item-text p{font-size:0.83rem;color:var(--muted);line-height:1.7;}
+@media(max-width:900px){.exp-inner{grid-template-columns:1fr;gap:48px;}}
+
+/* TESTIMONIALS */
+.testimonials{padding:100px 48px;background:var(--linen);}
+.test-grid{max-width:1000px;margin:56px auto 0;display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+.tcard{padding:36px;background:var(--cream);border-radius:4px;position:relative;}
+.tcard::before{
+  content:'\201C';
+  position:absolute;top:-10px;left:28px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:7rem;
+  color:var(--forest);
+  opacity:0.12;
+  line-height:1;
+}
+.tcard-stars{color:var(--forest);font-size:0.8rem;letter-spacing:3px;margin-bottom:18px;}
+.tcard q{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;
+  font-weight:400;
+  font-style:italic;
+  color:var(--soil);
+  line-height:1.75;
+  display:block;
+  margin-bottom:28px;
+  quotes:none;
+}
+.tcard-person{display:flex;align-items:center;gap:14px;}
+.tcard-av{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--forest);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  color:rgba(255,255,255,0.85);
+  font-size:1rem;
+  flex-shrink:0;
+}
+.tcard-name{font-size:0.9rem;font-weight:500;color:var(--soil);}
+.tcard-role{font-size:0.75rem;color:var(--muted);letter-spacing:0.05em;}
+@media(max-width:700px){.test-grid{grid-template-columns:1fr;}}
+
+/* RESERVATION */
+.reservation{padding:110px 48px;background:var(--linen-dark);}
+.res-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1.5fr;gap:80px;align-items:start;}
+.res-left .eyebrow{font-size:0.72rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--forest);display:flex;align-items:center;gap:14px;margin-bottom:24px;}
+.res-left .eyebrow::after{content:'';width:30px;height:1px;background:var(--forest);opacity:0.4;}
+.res-left h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:400;color:var(--soil);margin-bottom:22px;line-height:1.1;}
+.res-left h2 em{font-style:italic;color:var(--forest);}
+.res-left p{color:var(--muted);font-size:0.9rem;line-height:1.9;margin-bottom:40px;}
+.hours-list{display:flex;flex-direction:column;gap:0;}
+.hour-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+  font-size:0.88rem;
+}
+.hour-row:first-child{border-top:1px solid var(--border);}
+.hour-day{color:var(--soil);font-weight:400;}
+.hour-time{color:var(--muted);}
+.hour-closed{color:rgba(58,45,30,0.3);}
+.res-form-wrap{
+  background:var(--cream);
+  padding:48px;
+  border-radius:4px;
+  box-shadow:0 24px 80px rgba(58,45,30,0.1);
+}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.fg{display:flex;flex-direction:column;gap:8px;}
+.fg label{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);}
+.fg input,.fg select,.fg textarea{
+  border:1px solid var(--border);
+  background:var(--white);
+  border-radius:2px;
+  padding:13px 18px;
+  font-family:'Jost',sans-serif;
+  font-size:0.9rem;
+  font-weight:300;
+  color:var(--soil);
+  outline:none;
+  transition:border-color 0.2s;
+  width:100%;
+}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(58,45,30,0.3);}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--forest);}
+.fg select{
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6a55' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 18px center;
+  cursor:pointer;
+}
+.fg textarea{resize:none;height:100px;}
+.fg-full{margin-bottom:20px;}
+.res-submit{width:100%;margin-top:12px;}
+.res-ok{
+  display:none;
+  text-align:center;
+  background:rgba(74,110,50,0.1);
+  color:var(--forest);
+  padding:16px;
+  border-radius:2px;
+  font-size:0.88rem;
+  margin-top:14px;
+  letter-spacing:0.04em;
+}
+.res-ok.show{display:block;}
+@media(max-width:900px){.res-inner{grid-template-columns:1fr;}.res-form-wrap{padding:32px;}}
+@media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+
+/* FOOTER */
+footer{background:var(--forest-dark);color:rgba(255,255,255,0.5);padding:90px 48px 48px;}
+.footer-wrap{max-width:1200px;margin:0 auto;}
+.footer-top{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:60px;
+  margin-bottom:70px;
+}
+.footer-brand{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem;
+  font-weight:300;
+  color:rgba(255,255,255,0.9);
+  margin-bottom:16px;
+  letter-spacing:0.04em;
+}
+.footer-brand em{font-style:italic;color:rgba(255,255,255,0.45);}
+.footer-tagline{font-size:0.87rem;line-height:1.8;max-width:240px;color:rgba(255,255,255,0.38);}
+.footer-col h5{
+  font-size:0.7rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.6);
+  margin-bottom:20px;
+}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-col ul li a{
+  font-size:0.88rem;
+  color:rgba(255,255,255,0.38);
+  text-decoration:none;
+  transition:color 0.2s;
+  cursor:pointer;
+}
+.footer-col ul li a:hover{color:rgba(255,255,255,0.8);}
+.footer-addr{font-style:normal;font-size:0.88rem;line-height:2;color:rgba(255,255,255,0.38);}
+.footer-addr a{color:rgba(255,255,255,0.55);text-decoration:none;}
+.footer-addr a:hover{color:rgba(255,255,255,0.9);}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,0.08);
+  padding-top:32px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+}
+.footer-copy{font-size:0.8rem;color:rgba(255,255,255,0.28);}
+.footer-socials{display:flex;gap:14px;}
+.footer-socials a{
+  width:38px;height:38px;
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;
+  color:rgba(255,255,255,0.4);
+}
+.footer-socials a:hover{border-color:rgba(255,255,255,0.4);color:rgba(255,255,255,0.85);}
+.footer-socials svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+@media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr;gap:36px;}}
+@media(max-width:500px){.footer-top{grid-template-columns:1fr;}.footer-bottom{flex-direction:column;text-align:center;}}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.left{transform:translateX(-36px);}
+.reveal.right{transform:translateX(36px);}
+.reveal.visible{opacity:1;transform:translate(0,0);}
+.d1{transition-delay:0.08s;}.d2{transition-delay:0.18s;}.d3{transition-delay:0.28s;}.d4{transition-delay:0.38s;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-wrap">
+    <a href="#" class="nav-brand">Skov <em>&</em> Mark</a>
+    <ul class="nav-links">
+      <li><a href="#about">Om os</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#gallery">Galleri</a></li>
+      <li><a href="#producers">Producenter</a></li>
+      <li><a href="#reservation" class="nav-reserve">Reservér bord</a></li>
+    </ul>
+    <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mob-nav" id="mobNav">
+  <button class="mob-close" id="mobClose">✕</button>
+  <a href="#about" class="mlink">Om os</a>
+  <a href="#menu" class="mlink">Menu</a>
+  <a href="#gallery" class="mlink">Galleri</a>
+  <a href="#producers" class="mlink">Producenter</a>
+  <a href="#reservation" class="mlink">Reservér</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-label">Fra mark til bord — siden 2016</div>
+    <h1 class="hero-title">
+      Skov
+      <span class="amp">&</span>
+      <span class="mark">Mark</span>
+    </h1>
+    <p class="hero-desc">Et nordisk køkken forankret i naturen. Vi arbejder med hvad sæsonen bringer — fra vores egne marker, nærliggende skove og betroede lokale producenter.</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn-solid">Sæsonmenuen</a>
+      <a href="#about" class="btn-ghost">Vores historie</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-track"><div class="scroll-fill"></div></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img
+      src="https://images.unsplash.com/photo-1767785990437-dfe1fe516fe8?auto=format&fit=crop&w=900&q=80"
+      alt="Skov & Mark køkken" id="heroImg">
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<div class="manifesto">
+  <div class="manifesto-inner">
+    <div class="man-item reveal d1">
+      <div class="man-num">01</div>
+      <h3 class="man-title">Sæsonens rytme</h3>
+      <p class="man-text">Vi skifter menu med naturen. Hvad der vokser nu, er hvad vi serverer nu. Ingen kompromisser.</p>
+    </div>
+    <div class="man-item reveal d2">
+      <div class="man-num">02</div>
+      <h3 class="man-title">Hele råvaren</h3>
+      <p class="man-text">Rod til top, skind til ben. Vi spilder intet — og finder skønhed i det oversete.</p>
+    </div>
+    <div class="man-item reveal d3">
+      <div class="man-num">03</div>
+      <h3 class="man-title">Nært og ærligt</h3>
+      <p class="man-text">Alle ingredienser kan spores til en mark, en skov eller en bonde inden for 80 km.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-visual reveal left">
+      <div class="about-leaf">
+        <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/></svg>
+      </div>
+      <img class="about-img-main"
+        src="https://images.unsplash.com/photo-1592498546551-222538011a27?auto=format&fit=crop&w=700&q=80"
+        alt="Køkkenchef">
+      <img class="about-img-inset"
+        src="https://images.unsplash.com/photo-1529042355636-0f06afe127a9?auto=format&fit=crop&w=300&q=80"
+        alt="Mad fra marken">
+    </div>
+    <div class="about-text reveal right">
+      <span class="eyebrow">Vores filosofi</span>
+      <h2>Forankret i <em>naturen</em> og håndværket</h2>
+      <p>Skov & Mark opstod fra en simpel overbevisning: det bedste måltid er skabt af det, naturen tilbyder i netop dette øjeblik. Vi dyrkede vores første have i 2016 og har siden udvidet til et netværk af 14 lokale producenter.</p>
+      <p>Køkkenchef Astrid Mølgaard og hendes hold vandrer ugentligt gennem skoven og over markerne — ikke for poesiens skyld, men fordi det er der sandheden om menuen opstår. Det er ikke farm-to-table som brandingstrategi. Det er vores eneste måde at arbejde på.</p>
+      <p>Restauranten er placeret i en gammel avlsgård fra 1890, omgivet af bøgeskov og eng. Naturen er ikke bare inspiration — den er en del af interiøret.</p>
+      <div class="about-stats">
+        <div class="astat"><strong>14</strong><span>Lokale producenter</span></div>
+        <div class="astat"><strong>80%</strong><span>Egne marker</span></div>
+        <div class="astat"><strong>8+</strong><span>Sæsonmenuer om året</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORGANIC DIVIDER -->
+<div class="organic-divider" style="background:var(--linen);">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 Q180,60 360,20 Q540,-20 720,30 Q900,80 1080,15 Q1260,-30 1440,30 L1440,60 L0,60 Z" fill="#f5f0e8"/>
+  </svg>
+</div>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <div class="section-head reveal">
+    <span class="eyebrow">Sæsonens udvalg</span>
+    <h2>Vores <em>sæsonmenu</em></h2>
+    <p>Menuen afspejler hvad marken, skoven og vores producenter tilbyder netop nu. Alle anretninger kan tilpasses allergier.</p>
+  </div>
+  <div class="menu-body">
+    <div class="menu-cat reveal">
+      <div class="menu-cat-head"><h3>Forretter</h3></div>
+      <div class="menu-grid">
+        <div class="menu-card"><div class="mc-left"><h4>Syltede rodfrugter & skyr</h4><p>Vintermørkede rødbeder, syltet gulerod, rygeost og brændte hasselnødder. Serveret med surdejsknækbrød.</p><span class="mc-tag">Vegetar</span></div><div class="mc-price">145 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Røget ørred fra Silkeborg</h4><p>Koldrøget i egetræsflis, med dildcreme, syltede agurker og sprødt rugbrød fra nabobageriet.</p></div><div class="mc-price">165 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Svampe & æg fra egen høne</h4><p>Sauterede marksvampe, pocheret æg, løvstikke-emulsion og sprød rugbrødscrumble.</p><span class="mc-tag">Vegetar</span></div><div class="mc-price">135 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Hjortecarpaccio</h4><p>Tyndt skåret vildt fra Gribskov med skovbær, gedeost og ramløgsolie. Sæsonens delikatesse.</p></div><div class="mc-price">175 kr</div></div>
+      </div>
+    </div>
+    <div class="menu-cat reveal">
+      <div class="menu-cat-head"><h3>Hovedretter</h3></div>
+      <div class="menu-grid">
+        <div class="menu-card"><div class="mc-left"><h4>Helstegt andebryst</h4><p>Rosa and fra Hindsholm, pastinakpuré, syltede kirsebær og brun andesauce med timian.</p></div><div class="mc-price">325 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Græskarrisotto & trøffel</h4><p>Butternutgræskar fra vores mark, parmesanskum, sort trøffel og friske urter.</p><span class="mc-tag">Vegetar</span></div><div class="mc-price">265 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Langtidsbraiseret oksetykkam</h4><p>8 timer ved 75°, med rodfrugtsmos, karamelliserede perleløg og rosmarin-jus.</p></div><div class="mc-price">345 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Bagt knoldselleri</h4><p>Hele knoldselleri i egetræsaske, med beurre noisette, syltet pære og valnødder.</p><span class="mc-tag">Vegansk</span></div><div class="mc-price">245 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Grillet hornfisk</h4><p>Fanget i Øresund, grilletpå åben ild, med fennikelpuré, kapers og sandfennikkelsauce.</p></div><div class="mc-price">295 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Vildsvinekølle fra Tisvilde</h4><p>Langtidsstegt med hassel, vildtjus, tyttebær og brøndkarsecreme.</p></div><div class="mc-price">365 kr</div></div>
+      </div>
+    </div>
+    <div class="menu-cat reveal">
+      <div class="menu-cat-head"><h3>Desserter</h3></div>
+      <div class="menu-grid">
+        <div class="menu-card"><div class="mc-left"><h4>Æble & hyldeblomst</h4><p>Bagte æbler fra vores gård med hyldeblomstpanna cotta, rugbrødsis og honning.</p><span class="mc-tag">Vegetar</span></div><div class="mc-price">105 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Birke- og skovbær-trifli</h4><p>Hjemmelavet birkesirup, friske skovbær, mousse og sprøde havregrynscookies.</p><span class="mc-tag">Vegetar</span></div><div class="mc-price">115 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Osteudvalg fra regionen</h4><p>3 udvalgte oste fra nordsjællandske gårde med hjemmelavet knækbrød, honning og nødder.</p></div><div class="mc-price">145 kr</div></div>
+        <div class="menu-card"><div class="mc-left"><h4>Mørk chokolade & malt</h4><p>Smeltet 72% med maltis, karameliserede kornflager og røgede hasselnødder.</p><span class="mc-tag">Vegetar</span></div><div class="mc-price">95 kr</div></div>
+      </div>
+    </div>
+    <p class="menu-note reveal">Vi tilbyder en <a href="#reservation">sæsontastingmenu</a> på 6 retter for 695 kr. pr. kuvert — tilgængelig ved reservation. · Allergier og diætkrav — spørg vores personale.</p>
+  </div>
+</section>
+
+<!-- ORGANIC DIVIDER 2 -->
+<div class="organic-divider" style="background:var(--cream);">
+  <svg viewBox="0 0 1440 55" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,20 Q360,55 720,15 Q1080,-25 1440,25 L1440,55 L0,55 Z" fill="var(--linen)"/>
+  </svg>
+</div>
+
+<!-- PRODUCERS -->
+<section class="producers" id="producers">
+  <div class="prod-inner">
+    <div class="section-head reveal">
+      <span class="eyebrow">Vores netværk</span>
+      <h2>Dem der <em>dyrker</em> vores råvarer</h2>
+      <p>Vi samarbejder med producenter, der deler vores værdier om bæredygtighed, dyrevelfærd og respekt for jordens rytme.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card reveal d1">
+        <div class="prod-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 1 10 10H2A10 10 0 0 1 12 2z"/><path d="M2 12h20"/><path d="M12 12v10"/></svg></div>
+        <h4>Lindegaard Gård</h4>
+        <div class="prod-loc">Roskilde · 22 km</div>
+        <p>Frilandsgrise, gæs og ænder opdrættet med fokus på dyrevelfærd og naturlig foder.</p>
+      </div>
+      <div class="prod-card reveal d2">
+        <div class="prod-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 12v10"/><path d="M8 19h8"/></svg></div>
+        <h4>Bramstrup Urter</h4>
+        <div class="prod-loc">Fyn · 120 km</div>
+        <p>Specialiserede urter, blomster og vilde planter. Biodynamisk dyrkning siden 1998.</p>
+      </div>
+      <div class="prod-card reveal d3">
+        <div class="prod-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h4>Egholm Mejeri</h4>
+        <div class="prod-loc">Holbæk · 48 km</div>
+        <p>Håndlavede oste, smør og fløde fra jersey-køer på græsmarker ved Isefjorden.</p>
+      </div>
+      <div class="prod-card reveal d4">
+        <div class="prod-icon"><svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 19.3c-.34.51-.82.86-1.39.97C3.04 20.41 4 21 5 21c.5 0 1-.17 1.41-.46C9.78 18.5 13.5 14.5 19 13c0 0-5.5 1-6 6 5-3 7-9 4-11z"/></svg></div>
+        <h4>Gribskov Vildt</h4>
+        <div class="prod-loc">Nordsjælland · 35 km</div>
+        <p>Sæsonbaseret vildt fra kontrollerede jagt i Gribskov. Hjort, vildsvin og fuglevildt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section">
+  <div class="quote-inner reveal">
+    <div class="quote-mark">&ldquo;</div>
+    <p class="quote-text">Det er ikke vi der skaber menuen — det er naturen. Vi lytter bare godt efter.</p>
+    <div class="quote-attr">— Astrid Mølgaard, Køkkenchef</div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="gallery-inner">
+    <div class="section-head reveal">
+      <span class="eyebrow">Stemning & anretning</span>
+      <h2>Fra vores <em>verden</em></h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gi reveal d1"><img src="https://images.unsplash.com/photo-1755811248324-3c9b7c8865fc?auto=format&fit=crop&w=800&q=80" alt="Anretning"><div class="gi-overlay"></div></div>
+      <div class="gi reveal d2"><img src="https://images.unsplash.com/photo-1592498546551-222538011a27?auto=format&fit=crop&w=600&q=80" alt="Køkken"><div class="gi-overlay"></div></div>
+      <div class="gi reveal d3"><img src="https://images.unsplash.com/photo-1613492220155-b10b65c64333?auto=format&fit=crop&w=600&q=80" alt="Kød"><div class="gi-overlay"></div></div>
+      <div class="gi reveal d2"><img src="https://images.unsplash.com/photo-1529042355636-0f06afe127a9?auto=format&fit=crop&w=600&q=80" alt="Pasta"><div class="gi-overlay"></div></div>
+      <div class="gi reveal d3"><img src="https://images.unsplash.com/photo-1607257882338-70f7dd2ae344?auto=format&fit=crop&w=600&q=80" alt="Dessert"><div class="gi-overlay"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="experience">
+  <div class="exp-inner">
+    <div class="exp-text reveal left">
+      <span class="eyebrow">En aften hos os</span>
+      <h2>Hvad venter dig <em>her</em></h2>
+      <p>Skov & Mark er mere end et måltid. Det er en oplevelse af sted, sæson og samvær — designet til at tage dig ud af hverdagens tempo.</p>
+      <p>Restauranten rummer 42 kuverter fordelt i tre rum i den gamle avlsgård. Privat selskab kan booke hele restauranten.</p>
+    </div>
+    <div class="exp-items reveal right">
+      <div class="exp-item"><div class="exp-num">01</div><div class="exp-item-text"><h4>Velkomstsnack fra haven</h4><p>Inden menuen bringer vi et udvalg af sæsonens smagsnoter — fermenteret, syltede, tørret.</p></div></div>
+      <div class="exp-item"><div class="exp-num">02</div><div class="exp-item-text"><h4>Sæsontastingmenu</h4><p>6 retter skabt omkring én gennemgående sæson-fortælling. Ny menu hvert 6-8 uger.</p></div></div>
+      <div class="exp-item"><div class="exp-num">03</div><div class="exp-item-text"><h4>Naturvin & råvinsmenu</h4><p>Omhyggeligt kureret vinkort med fokus på biodynamiske og naturlige vine fra Europa.</p></div></div>
+      <div class="exp-item"><div class="exp-num">04</div><div class="exp-item-text"><h4>Tur i haven</h4><p>Inden eller efter middag kan du gå en tur med vores gartnere. Tilbydes efter sæson.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div style="max-width:1000px;margin:0 auto;">
+    <div class="section-head reveal">
+      <span class="eyebrow">Vores gæster siger</span>
+      <h2>Oplevelser fra bordet</h2>
+    </div>
+    <div class="test-grid">
+      <div class="tcard reveal d1">
+        <div class="tcard-stars">★ ★ ★ ★ ★</div>
+        <q>En aften hos Skov & Mark er som at træde ud af verden et øjeblik. Maden er dybt forankret i noget sandt — og det kan man smage.</q>
+        <div class="tcard-person">
+          <div class="tcard-av">KH</div>
+          <div><div class="tcard-name">Karoline Holm</div><div class="tcard-role">Madjournalist · Politiken</div></div>
+        </div>
+      </div>
+      <div class="tcard reveal d2">
+        <div class="tcard-stars">★ ★ ★ ★ ★</div>
+        <q>Vi kom som par og gik hjem som folk der kan smage forskellen på to marktyper. Det er det sjoveste der er sket os til et måltid i årevis.</q>
+        <div class="tcard-person">
+          <div class="tcard-av">TB</div>
+          <div><div class="tcard-name">Thomas & Britta</div><div class="tcard-role">Jubilæumsmiddag</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVATION -->
+<section class="reservation" id="reservation">
+  <div class="res-inner">
+    <div class="res-left reveal left">
+      <span class="eyebrow">Book et bord</span>
+      <h2>Reservér din <em>sæsonoplevelse</em></h2>
+      <p>Vi holder 42 kuverter og anbefaler altid at reservere minimum en uge frem — særligt til vores tastingmenu og weekender.</p>
+      <div class="hours-list">
+        <div class="hour-row"><span class="hour-day">Tirsdag – Torsdag</span><span class="hour-time">18:00 – 22:00</span></div>
+        <div class="hour-row"><span class="hour-day">Fredag – Lørdag</span><span class="hour-time">17:30 – 23:00</span></div>
+        <div class="hour-row"><span class="hour-day">Søndag</span><span class="hour-time">12:00 – 17:00 (frokost)</span></div>
+        <div class="hour-row"><span class="hour-day">Mandag</span><span class="hour-closed">Lukket</span></div>
+      </div>
+    </div>
+    <div class="reveal right">
+      <div class="res-form-wrap">
+        <form id="resForm" novalidate>
+          <div class="form-row">
+            <div class="fg"><label>Navn</label><input type="text" placeholder="Dit fulde navn" required></div>
+            <div class="fg"><label>Telefon</label><input type="tel" placeholder="+45 00 00 00 00"></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>E-mail</label><input type="email" placeholder="din@email.dk" required></div>
+            <div class="fg"><label>Antal gæster</label>
+              <select>
+                <option>1 gæst</option><option selected>2 gæster</option>
+                <option>3 gæster</option><option>4 gæster</option>
+                <option>5 gæster</option><option>6 gæster</option>
+                <option>Selskab (7+) — ring til os</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>Dato</label><input type="date" required></div>
+            <div class="fg"><label>Tidspunkt</label>
+              <select>
+                <option>17:30</option><option>18:00</option><option>18:30</option>
+                <option>19:00</option><option>19:30</option><option>20:00</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>Menu</label>
+              <select>
+                <option>À la carte</option>
+                <option>Sæsontastingmenu (6 retter · 695 kr)</option>
+                <option>Vegetarisk tastingmenu (6 retter · 595 kr)</option>
+              </select>
+            </div>
+            <div class="fg"><label>Vinmenu</label>
+              <select>
+                <option>Ingen vinmenu</option>
+                <option>Naturvinsmenu (3 glas · 295 kr)</option>
+                <option>Alkoholfri menu (3 glas · 185 kr)</option>
+              </select>
+            </div>
+          </div>
+          <div class="fg fg-full"><label>Særlige ønsker & allergier</label><textarea placeholder="Fortæl os om allergier, jubilæum, diæt eller andre ønsker..."></textarea></div>
+          <button type="submit" class="btn-solid res-submit">Send reservationsanmodning</button>
+          <div class="res-ok" id="resOk">Tak! Vi bekræfter din reservation inden for 24 timer — tjek gerne din e-mail inkl. spam-mappen.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-wrap">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">Skov <em>&</em> Mark</div>
+        <p class="footer-tagline">Et nordisk farm-to-table køkken forankret i sæsonernes skiften og respekten for råvaren.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <ul>
+          <li><a onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">Om os</a></li>
+          <li><a onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Menu</a></li>
+          <li><a onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">Galleri</a></li>
+          <li><a onclick="document.getElementById('producers').scrollIntoView({behavior:'smooth'})">Producenter</a></li>
+          <li><a onclick="document.getElementById('reservation').scrollIntoView({behavior:'smooth'})">Reservér</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Find os</h5>
+        <address class="footer-addr">
+          Avlsgårdsvej 8<br>
+          3400 Hillerød<br><br>
+          <a href="tel:+4548123456">+45 48 12 34 56</a><br>
+          <a href="mailto:bord@skovogmark.dk">bord@skovogmark.dk</a>
+        </address>
+      </div>
+      <div class="footer-col">
+        <h5>Åbningstider</h5>
+        <ul>
+          <li><a>Tir–tor: 18:00–22:00</a></li>
+          <li><a>Fre–lør: 17:30–23:00</a></li>
+          <li><a>Søn: 12:00–17:00</a></li>
+          <li><a style="opacity:0.3;">Mandag: Lukket</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Skov & Mark. Alle rettigheder forbeholdes.</span>
+      <div class="footer-socials">
+        <a href="#" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="#" aria-label="TripAdvisor">
+          <svg viewBox="0 0 24 24" stroke-linecap="round"><circle cx="7" cy="13" r="3"/><circle cx="17" cy="13" r="3"/><path d="M3 9c2-2 5-3 9-3s7 1 9 3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',scrollY>60),{passive:true});
+
+document.getElementById('ham').addEventListener('click',()=>document.getElementById('mobNav').classList.add('open'));
+document.getElementById('mobClose').addEventListener('click',()=>document.getElementById('mobNav').classList.remove('open'));
+document.querySelectorAll('.mlink').forEach(l=>l.addEventListener('click',()=>document.getElementById('mobNav').classList.remove('open')));
+
+document.getElementById('heroImg').addEventListener('load',function(){this.classList.add('loaded');});
+
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+document.getElementById('resForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const ok=document.getElementById('resOk');
+  ok.classList.add('show');
+  e.target.reset();
+  setTimeout(()=>ok.classList.remove('show'),6000);
+});
+</script>
+</body>
+</html>

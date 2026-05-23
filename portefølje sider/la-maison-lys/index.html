@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Maison</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container nav-inner">
+        <a href="#hero" class="brand"><span>✦</span> La Maison</a>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#hero">Hjem</a></li>
+          <li><a href="#about">Om os</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#reservation">Reservér</a></li>
+          <li><a href="#contact">Kontakt</a></li>
+        </ul>
+
+        <a href="#reservation" class="btn btn-primary desktop-booking">Book bord</a>
+      </div>
+    </nav>
+
+    <header id="hero" class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content container">
+        <p class="eyebrow">Velkommen til</p>
+        <h1>La Maison</h1>
+        <p class="lead">
+          En kulinarisk rejse gennem franske og nordiske smagsoplevelser - tilberedt med kaerlighed og de bedste
+          råvarer.
+        </p>
+        <div class="hero-actions">
+          <a href="#reservation" class="btn btn-primary">Reservér bord</a>
+          <a href="#menu" class="btn btn-outline">Se menuen</a>
+        </div>
+      </div>
+    </header>
+
+    <section id="about" class="section about">
+      <div class="container about-grid">
+        <div class="about-image-wrap">
+          <img
+            src="https://images.unsplash.com/photo-1767785990437-dfe1fe516fe8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxyZXN0YXVyYW50JTIwdGVhbSUyMGNoZWYlMjBraXRjaGVufGVufDF8fHx8MTc3NDk0ODE0Mnww&ixlib=rb-4.1.0&q=80&w=1080"
+            alt="Vores køkkenteam"
+          />
+        </div>
+        <div>
+          <p class="eyebrow">Om os</p>
+          <h2>En passion for det gode måltid</h2>
+          <p>
+            La Maison blev grundlagt i 2010 med en enkel vision: at skabe en restaurant, hvor gæster føler sig hjemme
+            og samtidig oplever det bedste fra det franske og nordiske køkken.
+          </p>
+          <p>
+            Vores køkkenchef, Pierre Morel, bringer sin årtiers erfaring fra Paris og København til bordet -
+            bogstaveligt talt. Alle retter tilberedes af sæsonens friske, lokalt dyrkede ingredienser.
+          </p>
+          <div class="stats">
+            <div><strong>15+</strong><span>Års erfaring</span></div>
+            <div><strong>3</strong><span>Michelin stjerner</span></div>
+            <div><strong>5000+</strong><span>Glade gæster</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu" class="section menu">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Vores</p>
+          <h2>Sæsonmenu</h2>
+        </div>
+
+        <h3 class="menu-subtitle">Forretter</h3>
+        <div class="menu-grid active" data-panel="forretter">
+          <article class="menu-card">
+            <h3>Gratineret kammusling <span>149 kr.</span></h3>
+            <p>Med trøffelmousse, karamelliseret løg og sprød bacon</p>
+          </article>
+          <article class="menu-card">
+            <h3>Foie gras terrine <span>175 kr.</span></h3>
+            <p>Med brioche, figensyltetøj og balsamico-gel</p>
+          </article>
+          <article class="menu-card">
+            <h3>Hummer bisque <span>135 kr.</span></h3>
+            <p>Cremet suppe med royale hummer og frisk estragon</p>
+          </article>
+          <article class="menu-card">
+            <h3>Bagt gedeost <span>98 kr.</span></h3>
+            <p>Med honning, valnødder og rødbede-vinaigrette</p>
+          </article>
+        </div>
+
+        <h3 class="menu-subtitle">Hovedretter</h3>
+        <div class="menu-grid active" data-panel="hovedretter">
+          <article class="menu-card">
+            <h3>Côte de boeuf <span>395 kr.</span></h3>
+            <p>600g oksekød, bearnaisesauce, trøffelfritter og grønne asparges</p>
+          </article>
+          <article class="menu-card">
+            <h3>Hjemmelavet pasta <span>228 kr.</span></h3>
+            <p>Frisk tagliatelle med svamperagù, parmesan og trøffelolie</p>
+          </article>
+          <article class="menu-card">
+            <h3>Helleflynder <span>285 kr.</span></h3>
+            <p>Med blomkålspuré, kapers, citronsmør og syltede grøntsager</p>
+          </article>
+          <article class="menu-card">
+            <h3>Andebryst <span>298 kr.</span></h3>
+            <p>Confit andelår, appelsin-jus, dauphinoise kartofler og ærtecrème</p>
+          </article>
+        </div>
+
+        <h3 class="menu-subtitle">Desserter</h3>
+        <div class="menu-grid active" data-panel="desserter">
+          <article class="menu-card">
+            <h3>Chokolade fondant <span>118 kr.</span></h3>
+            <p>Flydende chokoladekerne med vanilleis og saltet karamel</p>
+          </article>
+          <article class="menu-card">
+            <h3>Crème brûlée <span>98 kr.</span></h3>
+            <p>Klassisk fransk med vanilje og karamelliseret sukker</p>
+          </article>
+          <article class="menu-card">
+            <h3>Assiette de fromages <span>135 kr.</span></h3>
+            <p>Udvalg af franske oste med nødder, druer og honning</p>
+          </article>
+          <article class="menu-card">
+            <h3>Poire Belle Hélène <span>105 kr.</span></h3>
+            <p>Pocheret pære med varm chokoladesauce og flødeis</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section testimonials">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Hvad vores gæster siger</p>
+          <h2>Anmeldelser</h2>
+        </div>
+        <div class="testimonial-grid">
+          <article>
+            <p class="stars">★★★★★</p>
+            <p>"La Maison er simpelthen en perle. Maden er fantastisk, atmosfæren er varm og personalet er utroligt opmærksomme."</p>
+            <strong>Anders Nielsen</strong><span>Stammegæst</span>
+          </article>
+          <article>
+            <p class="stars">★★★★★</p>
+            <p>"Jeg har besøgt mange restauranter i Skandinavien, men La Maison skiller sig ud."</p>
+            <strong>Sophie Laurent</strong><span>Madblogger</span>
+          </article>
+          <article>
+            <p class="stars">★★★★★</p>
+            <p>"Vi fejrede vores jubilæum her, og det overgik alle forventninger."</p>
+            <strong>Mads og Lise</strong><span>Jubilæumsmiddag</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="reservation" class="section reservation">
+      <div class="container reservation-box">
+        <div class="reservation-info">
+          <h3>Åbningstider</h3>
+          <p>Mandag - Torsdag: 17:30 - 22:00</p>
+          <p>Fredag - Lørdag: 17:00 - 23:00</p>
+          <p>Søndag: Lukket</p>
+        </div>
+        <div class="reservation-form-wrap">
+          <form id="reservationForm">
+            <div class="form-grid">
+              <input name="name" placeholder="Navn" required />
+              <input name="email" type="email" placeholder="E-mail" required />
+              <input name="phone" type="tel" placeholder="Telefon" required />
+              <select name="guests">
+                <option value="1">1 gæst</option>
+                <option value="2" selected>2 gæster</option>
+                <option value="3">3 gæster</option>
+                <option value="4">4 gæster</option>
+                <option value="5">5 gæster</option>
+                <option value="6">6 gæster</option>
+              </select>
+              <input name="date" type="date" required />
+              <select name="time" required>
+                <option value="" selected disabled>Vælg tidspunkt</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+              </select>
+            </div>
+            <textarea name="note" rows="3" placeholder="Særlige ønsker (valgfrit)"></textarea>
+            <button type="submit" class="btn btn-primary full">Send reservation</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contact" class="footer">
+      <div class="container footer-grid">
+        <div>
+          <h4>La Maison</h4>
+          <p>En kulinarisk oplevelse i hjertet af København, siden 2010.</p>
+        </div>
+        <div>
+          <h5>Kontakt</h5>
+          <p>Bredgade 27, 1. sal</p>
+          <p>1260 København K</p>
+          <p>+45 33 12 34 56</p>
+          <p>info@lamaison.dk</p>
+        </div>
+        <div>
+          <h5>Åbningstider</h5>
+          <p>Man - Tor: 17:30 - 22:00</p>
+          <p>Fre - Lør: 17:00 - 23:00</p>
+          <p>Søndag: Lukket</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+  

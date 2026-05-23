@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio – Hjemmesider og systemer til restauranter | GroveX</title>
+  <meta name="description" content="Se eksempler på hjemmesider, kassesystemer og digitale løsninger som GroveX har bygget til restauranter og caféer.">
+  <link rel="canonical" href="https://grovex.dk/portfolio.html">
+  <link rel="icon" type="image/png" href="assets/grovex-logo-firkant.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── PORTFOLIO PAGE SPECIFIC ── */
+    .filter-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 48px; margin-top: 12px;
+    }
+    .filter-btn {
+      padding: 8px 20px; border-radius: 100px;
+      border: 1.5px solid rgba(0,0,0,.12);
+      font-family: var(--font-display); font-size: 0.82rem; font-weight: 600;
+      color: var(--muted); background: none; cursor: pointer;
+      transition: all .2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--black); color: var(--white); border-color: var(--black);
+    }
+
+    /* CTA banner */
+    .cta-banner {
+      background: var(--black); border-radius: 24px;
+      padding: 64px 48px; text-align: center;
+      margin: 0 32px 120px;
+      max-width: 1100px; margin-left: auto; margin-right: auto;
+      margin-bottom: 120px;
+      position: relative; overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(circle, rgba(73,124,255,.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-banner h2 {
+      font-family: var(--font-display); font-size: clamp(1.8rem,3.5vw,2.8rem);
+      font-weight: 800; letter-spacing: -0.03em;
+      color: #fff; margin-bottom: 16px; position: relative;
+    }
+    .cta-banner p {
+      font-size: 1rem; color: rgba(255,255,255,.5);
+      max-width: 440px; margin: 0 auto 36px; line-height: 1.7; position: relative;
+    }
+    .cta-banner .btn-primary { position: relative; }
+
+    @media (max-width: 600px) {
+      .cta-banner { padding: 40px 24px; margin: 0 16px 80px; }
+      .filter-bar { gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor"></div><div id="cursor-ring"></div>
+
+  <header id="header">
+    <a href="/" class="logo-mark">GroveX</a>
+    <nav>
+      <a href="/">Forside</a>
+      <a href="om-os.html">Om os</a>
+      <a href="portfolio.html" style="color:var(--black);font-weight:600">Portefølje</a>
+      <a href="kontakt.html" class="nav-cta">Kontakt</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </header>
+  <div class="mob-overlay" id="mobOverlay"></div>
+  <div class="mob-drawer" id="mobDrawer">
+    <a href="/">Forside</a><a href="om-os.html">Om os</a>
+    <a href="portfolio.html">Portefølje</a><a href="kontakt.html">Kontakt</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="portfolio-hero-section">
+    <span class="label" style="justify-content:center;display:flex;animation:fadeUp .7s .1s both">Portefølje</span>
+    <h1 class="portfolio-hero-title">Vores arbejde</h1>
+    <p class="portfolio-hero-sub">Et udvalg af hjemmesider og restaurant-systemer vi har bygget til vores kunder i hele Danmark.</p>
+  </section>
+
+  <!-- PORTFOLIO GRID -->
+  <section class="portfolio-section">
+    <div class="filter-bar reveal">
+    </div>
+    <div class="port-grid">
+
+      <!-- Havnen -->
+      <div class="port-card reveal" style="transition-delay:.05s">
+        <div class="portfolio-iframe-wrap">
+          <iframe src="/portefølje sider/havnen/havnen.html" loading="lazy" scrolling="no" title="Havnen"></iframe>
+          <a href="/portefølje sider/havnen/havnen.html" class="port-hover" target="_blank" rel="noopener">Besøg hjemmeside ↗</a>
+        </div>
+        <div class="port-info">
+          <div class="port-name">Havnen</div>
+          <div class="port-type">Restaurant &amp; Bar</div>
+        </div>
+      </div>
+
+      <!-- Skov & Mark -->
+      <div class="port-card reveal" style="transition-delay:.1s">
+        <div class="portfolio-iframe-wrap">
+          <iframe src="/portefølje sider/skov & mark/skov-og-mark.html" loading="lazy" scrolling="no" title="Skov &amp; Mark"></iframe>
+          <a href="/portefølje sider/skov & mark/skov-og-mark.html" class="port-hover" target="_blank" rel="noopener">Besøg hjemmeside ↗</a>
+        </div>
+        <div class="port-info">
+          <div class="port-name">Skov &amp; Mark</div>
+          <div class="port-type">Nordisk restaurant</div>
+        </div>
+      </div>
+
+      <div class="port-card reveal" style="transition-delay:.1s">
+        <div class="portfolio-iframe-wrap">
+          <iframe src="/portefølje sider/botanica/botanica.html" loading="lazy" scrolling="no" title="Skov &amp; Mark"></iframe>
+          <a href="/portefølje sider/botanica/botanica.html" class="port-hover" target="_blank" rel="noopener">Besøg hjemmeside ↗</a>
+        </div>
+        <div class="port-info">
+          <div class="port-name">Botanica</div>
+          <div class="port-type">Botanisk restaurant</div>
+        </div>
+      </div> 
+
+      <!-- La Maison -->
+      <div class="port-card reveal" style="transition-delay:.15s">
+        <div class="portfolio-iframe-wrap">
+          <iframe src="/portefølje sider/la-maison/index.html" loading="lazy" scrolling="no" title="La Maison"></iframe>
+          <a href="/portefølje sider/la-maison/index.html" class="port-hover" target="_blank" rel="noopener">Besøg hjemmeside ↗</a>
+        </div>
+        <div class="port-info">
+          <div class="port-name">La Maison</div>
+          <div class="port-type">Restauranthjemmeside</div>
+        </div>
+      </div>
+
+      <!-- Savory Haven -->
+      <div class="port-card reveal" style="transition-delay:.2s">
+        <div class="portfolio-iframe-wrap">
+          <iframe src="/portefølje sider/savory-haven/index.html" loading="lazy" scrolling="no" title="Savory Haven"></iframe>
+          <a href="/portefølje sider/savory-haven/index.html" class="port-hover" target="_blank" rel="noopener">Besøg hjemmeside ↗</a>
+        </div>
+        <div class="port-info">
+          <div class="port-name">Savory Haven</div>
+          <div class="port-type">Café &amp; Take-away</div>
+        </div>
+      </div>
+
+      <!-- La Maison Lys -->
+      <div class="port-card reveal" style="transition-delay:.25s">
+        <div class="portfolio-iframe-wrap">
+          <iframe src="/portefølje sider/la-maison-lys/index.html" loading="lazy" scrolling="no" title="La Maison Lys"></iframe>
+          <a href="/portefølje sider/la-maison-lys/index.html" class="port-hover" target="_blank" rel="noopener">Besøg hjemmeside ↗</a>
+        </div>
+        <div class="port-info">
+          <div class="port-name">La Maison Lys</div>
+          <div class="port-type">Restauranthjemmeside</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner reveal">
+    <h2>Dit projekt kunne være det næste</h2>
+    <p>Vi har kapacitet til nye samarbejder. Lad os tale om, hvad vi kan bygge til din restaurant.</p>
+    <a href="kontakt.html" class="btn-primary">
+      Kom i gang
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer><div class="footer-top">
+    <div><div class="footer-brand-name">GroveX</div><p class="footer-desc">Digitale systemer og automatisering specialiseret til restaurationsbranchen i Danmark.</p></div>
+    <div class="footer-col"><h5>Navigation</h5><a href="/">Forside</a><a href="om-os.html">Om os</a><a href="portfolio.html">Portefølje</a><a href="kontakt.html">Kontakt</a></div>
+    <div class="footer-col"><h5>Ydelser</h5><a href="#">Kassesystemer</a><a href="#">Hjemmesider</a><a href="#">Automatisering</a><a href="#">Integrationer</a></div>
+    <div class="footer-col"><h5>Kontakt</h5><a href="tel:+4560571908">+45 60 57 19 08</a><a href="mailto:grovex.dk@gmail.com">grovex.dk@gmail.com</a></div>
+  </div>
+  <div class="footer-bottom"><span class="footer-copy">© 2026 GroveX. Alle rettigheder forbeholdes.</span><span class="footer-copy">Danmark</span></div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Filter buttons (visual only – extend with real filtering if needed)
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
