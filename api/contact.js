@@ -16,7 +16,7 @@ async function getClient() {
   return cachedClient;
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND);
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -46,7 +46,7 @@ module.exports = async function handler(req, res) {
     res.status(201).json({ success: true });
 
     resend.emails.send({
-      from: 'GroveX Booking <onboarding@resend.dev>',
+      from: 'GroveX Booking <booking@grovex.dk>',
       to: 'grovex.dk@gmail.com',
       subject: `Ny booking fra ${NAVN}`,
       text: [
