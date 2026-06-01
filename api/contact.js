@@ -51,7 +51,9 @@ module.exports = async function handler(req, res) {
       createdAt: new Date(),
     });
 
-    await transporter.sendMail({
+    res.status(201).json({ success: true });
+
+    transporter.sendMail({
       from: `"GroveX Booking" <${process.env.SMTP_USER}>`,
       to: 'grovex.dk@gmail.com',
       subject: `Ny booking fra ${NAVN}`,
@@ -63,9 +65,7 @@ module.exports = async function handler(req, res) {
         `Dato:        ${DATO || '–'}`,
         `Tidspunkt:   ${TIDSPUNKT || '–'}`,
       ].join('\n'),
-    });
-
-    return res.status(201).json({ success: true });
+    }).catch(err => console.error('Email error:', err));
   } catch (err) {
     console.error('Booking error:', err);
     return res.status(500).json({ error: 'Server error' });
