@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-const options = {
+const mongoOptions = {
   appName: 'MODE_BOOKINGER',
   maxIdleTimeMS: 5000,
 };
@@ -10,21 +10,13 @@ let cachedClient = null;
 
 async function getClient() {
   if (!cachedClient) {
-    cachedClient = new MongoClient(process.env.MODE_BOOKINGER_MONGODB_URI, options);
+    cachedClient = new MongoClient(process.env.MODE_BOOKINGER_MONGODB_URI, mongoOptions);
     await cachedClient.connect();
   }
   return cachedClient;
 }
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -53,8 +45,8 @@ module.exports = async function handler(req, res) {
 
     res.status(201).json({ success: true });
 
-    transporter.sendMail({
-      from: `"GroveX Booking" <${process.env.SMTP_USER}>`,
+    resend.emails.send({
+      from: 'GroveX Booking <onboarding@resend.dev>',
       to: 'grovex.dk@gmail.com',
       subject: `Ny booking fra ${NAVN}`,
       text: [
@@ -66,6 +58,7 @@ module.exports = async function handler(req, res) {
         `Tidspunkt:   ${TIDSPUNKT || '–'}`,
       ].join('\n'),
     }).catch(err => console.error('Email error:', err));
+
   } catch (err) {
     console.error('Booking error:', err);
     return res.status(500).json({ error: 'Server error' });
