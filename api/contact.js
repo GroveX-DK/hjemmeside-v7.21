@@ -6,7 +6,7 @@ const options = {
   maxIdleTimeMS: 5000,
 };
 
-const client = new MongoClient(process.env.MONGODB_URI, options);
+const client = new MongoClient(process.env.MODE_BOOKINGER_MONGODB_URI, options);
 attachDatabasePool(client.connect());
 
 module.exports = async function handler(req, res) {
@@ -21,8 +21,8 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const db = client.db('grovex');
-    const collection = db.collection('bookinger');
+    const db = client.db('MODE_BOOKINGER');
+    const collection = db.collection('MODE_BOOKINGER');
     await collection.insertOne({
       NAVN,
       VIRKSOMHED,
