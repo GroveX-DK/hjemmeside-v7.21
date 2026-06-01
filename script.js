@@ -79,12 +79,6 @@
   }
 
   // ── CONTACT FORM ──
-  // ── Supabase config ──────────────────────────────────────────────
-const SUPABASE_URL = 'https://sfizsksfaefpjojttewj.supabase.co';       // ← din projekt-URL
-const SUPABASE_KEY = 'sb_publishable_pAq9oX16HJU3Hp6HR0bNJw_9wHtFtuV';                     // ← din anon/public API-nøgle
-const TABLE_NAME   = 'MODE_BOOKINGER';                   // ← navn på din tabel
-
-// ── Formular submit ──────────────────────────────────────────────
 const cform = document.getElementById('contactForm');
 if (cform) {
   cform.addEventListener('submit', async e => {
@@ -95,23 +89,18 @@ if (cform) {
 
     const fd = new FormData(cform);
     const payload = {
-      NAVN:    fd.get('name'),
+      NAVN:      fd.get('name'),
       VIRKSOMHED: fd.get('company'),
       TELEFON:   fd.get('phone'),
-      EMAIL:   fd.get('email'),
-      DATO:    fd.get('date'),
-      TIDSPUNKT:    fd.get('time'),
+      EMAIL:     fd.get('email'),
+      DATO:      fd.get('date'),
+      TIDSPUNKT: fd.get('time'),
     };
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}`, {
+      const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type':  'application/json',
-          'apikey':         SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Prefer':         'return=minimal',   // returnér ikke rækken, blot 201
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
@@ -120,8 +109,7 @@ if (cform) {
         status.style.color = '#34d399';
         cform.reset();
       } else {
-        const err = await res.json();
-        console.error('Supabase fejl:', err);
+        console.error('Kontaktformular fejl:', await res.json());
         status.textContent = 'Noget gik galt – prøv igen.';
         status.style.color = '#f87171';
       }
