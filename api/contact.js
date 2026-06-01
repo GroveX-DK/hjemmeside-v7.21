@@ -1,13 +1,19 @@
 const { MongoClient } = require('mongodb');
-const { attachDatabasePool } = require('@vercel/functions');
 
 const options = {
-  appName: 'grovex.contact-form',
+  appName: 'MODE_BOOKINGER',
   maxIdleTimeMS: 5000,
 };
 
-const client = new MongoClient(process.env.MODE_BOOKINGER_MONGODB_URI, options);
-attachDatabasePool(client.connect());
+let cachedClient = null;
+
+async function getClient() {
+  if (!cachedClient) {
+    cachedClient = new MongoClient(process.env.MODE_BOOKINGER_MONGODB_URI, options);
+    await cachedClient.connect();
+  }
+  return cachedClient;
+}
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -21,6 +27,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+    const client = await getClient();
     const db = client.db('MODE_BOOKINGER');
     const collection = db.collection('MODE_BOOKINGER');
     await collection.insertOne({
