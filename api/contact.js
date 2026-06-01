@@ -1,4 +1,5 @@
 const { MongoClient } = require('mongodb');
+const nodemailer = require('nodemailer');
 
 const options = {
   appName: 'MODE_BOOKINGER',
@@ -14,6 +15,16 @@ async function getClient() {
   }
   return cachedClient;
 }
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -39,9 +50,24 @@ module.exports = async function handler(req, res) {
       TIDSPUNKT,
       createdAt: new Date(),
     });
+
+    await transporter.sendMail({
+      from: `"GroveX Booking" <${process.env.SMTP_USER}>`,
+      to: 'grovex.dk@gmail.com',
+      subject: `Ny booking fra ${NAVN}`,
+      text: [
+        `Navn:        ${NAVN}`,
+        `Virksomhed:  ${VIRKSOMHED || '–'}`,
+        `Telefon:     ${TELEFON || '–'}`,
+        `Email:       ${EMAIL}`,
+        `Dato:        ${DATO || '–'}`,
+        `Tidspunkt:   ${TIDSPUNKT || '–'}`,
+      ].join('\n'),
+    });
+
     return res.status(201).json({ success: true });
   } catch (err) {
-    console.error('MongoDB error:', err);
-    return res.status(500).json({ error: 'Database error' });
+    console.error('Booking error:', err);
+    return res.status(500).json({ error: 'Server error' });
   }
 };
