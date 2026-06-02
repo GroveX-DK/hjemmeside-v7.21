@@ -16,7 +16,7 @@ async function getClient() {
   return cachedClient;
 }
 
-const resend = new Resend(process.env.RESEND);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
