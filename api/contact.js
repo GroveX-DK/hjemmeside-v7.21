@@ -46,7 +46,7 @@ module.exports = async function handler(req, res) {
     res.status(201).json({ success: true });
 
     resend.emails.send({
-      from: 'GroveX Booking <grovex.dk@gmail.com>',
+      from: 'GroveX Booking <Booking@grovex.dk>',
       to: 'grovex.dk@gmail.com',
       subject: `Ny booking fra ${NAVN}`,
       text: [
