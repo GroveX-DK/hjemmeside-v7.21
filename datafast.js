@@ -11,7 +11,7 @@ import { initDataFast } from 'https://cdn.jsdelivr.net/npm/datafast@3.0.18/+esm'
 
 // Fetch the website ID from the server (env var DATAFAST_WEBSITE_ID) instead of
 // hard-coding it here. See api/datafast-config.js.
-const datafast = await fetch('/api/datafast-config')
+const datafast = "dfid_6mkFlWs0Ci1sXNImp8mFA"
   .then((res) => res.json())
   .then(({ websiteId, domain }) => {
     if (!websiteId) {
