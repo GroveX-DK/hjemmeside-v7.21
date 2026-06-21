@@ -18,6 +18,43 @@ async function getClient() {
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Read a single cookie value from the raw Cookie header.
+function getCookie(cookieHeader, name) {
+  if (!cookieHeader) return null;
+  for (const part of cookieHeader.split(';')) {
+    const [key, ...rest] = part.trim().split('=');
+    if (key === name) return decodeURIComponent(rest.join('='));
+  }
+  return null;
+}
+
+// Fire a server-side DataFast goal, attributed to the visitor via the
+// datafast_visitor_id cookie that the client-side tracker (datafast.js) set.
+// Fire-and-forget: never block or fail the request on analytics.
+async function trackDatafastGoal(req, name, metadata) {
+  const apiKey = process.env.DATAFAST_API_KEY;
+  if (!apiKey) return; // Not configured — skip silently.
+
+  const visitorId = getCookie(req.headers.cookie, 'datafast_visitor_id');
+  if (!visitorId) return; // Visitor was never tracked (e.g. cookies blocked).
+
+  try {
+    const resp = await fetch('https://datafa.st/api/v1/goals', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ datafast_visitor_id: visitorId, name, metadata }),
+    });
+    if (!resp.ok) {
+      console.error('DataFast goal error:', resp.status, await resp.text());
+    }
+  } catch (err) {
+    console.error('DataFast goal error:', err);
+  }
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -44,6 +81,11 @@ module.exports = async function handler(req, res) {
     });
 
     res.status(201).json({ success: true });
+
+    // Track the booking as a DataFast conversion goal (cookie-attributed).
+    trackDatafastGoal(req, 'booking', {
+      company: VIRKSOMHED || '',
+    });
 
     resend.emails.send({
       from: 'GroveX Booking <Booking@grovex.dk>',
